@@ -20,6 +20,8 @@ import { DatabaseChartComponent } from './dashboard/database-chart/database-char
 import { ParticlesModule } from 'angular-particle';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { ImprintComponent } from './imprint/imprint.component';
+import { FilesComponent } from './files/files.component';
+import { FaqComponent } from './faq/faq.component';
 
 const routen: Routes = [
 	{
@@ -34,6 +36,12 @@ const routen: Routes = [
 	}, {
 		path: 'imprint',
 		component: ImprintComponent
+	}, {
+		path: 'files',
+		component: FilesComponent
+	}, {
+		path: 'faq',
+		component: FaqComponent
 	}
 ];
 
@@ -46,7 +54,9 @@ const routen: Routes = [
 		StorageChartComponent,
 		DatabaseChartComponent,
 		PrivacyComponent,
-		ImprintComponent
+		ImprintComponent,
+		FilesComponent,
+		FaqComponent
 	],
 	imports: [
 		RouterModule.forRoot(routen),

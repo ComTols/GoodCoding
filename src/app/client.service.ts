@@ -73,9 +73,12 @@ export class ClientService {
 		return this.isLoginDataSet;
 	}
 
-	public async sendDataToServerApi(body) {
-		await this.client.post("http://80.151.1.57:1180/api.php", body).pipe(retry(this.connectionFaildRetry)).subscribe(data => {
+	public sendDataToServerApi(body: { action: string, pass: string, user: string }, parent) {
+		body.pass = this.password;
+		body.user = this.username;
+		this.client.post("http://80.151.1.57:1180/api.php", body).pipe(retry(this.connectionFaildRetry)).subscribe(data => {
 			this.lasServerResp = data;
+			parent.serverFinish(data);
 		}, error => {
 			this.lasServerResp = null;
 			console.log(error);

@@ -10,6 +10,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { MatTableModule } from '@angular/material/table';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 const material = [
 	MatFormFieldModule,
@@ -22,7 +26,11 @@ const material = [
 	MatToolbarModule,
 	MatProgressSpinnerModule,
 	MatSidenavModule,
-	MatListModule
+	MatListModule,
+	MatTableModule,
+	MatMenuModule,
+	MatDividerModule,
+	MatExpansionModule
 ];
 
 @NgModule({

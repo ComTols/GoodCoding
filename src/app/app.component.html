@@ -25,8 +25,9 @@
 			<h1>Good Coding</h1>
 			<h2>{{site}}</h2>
 		</div>
-		<router-outlet></router-outlet>
-
+		<div class="wrapper">
+			<router-outlet></router-outlet>
+		</div>
 	</mat-sidenav-content>
 </mat-sidenav-container>
 <router-outlet *ngIf="isLogin"></router-outlet>

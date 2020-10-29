@@ -1,0 +1,27 @@
+.wrapper {
+	background-color: #ffffff;
+    padding: 2em 10%;
+    min-height: 32em;
+}
+
+.uploadNewFile {
+    float: right;
+    font-size: 5em;
+    height: max-content;
+    width: max-content;
+    cursor: pointer;
+    user-select: none;
+}
+
+mat-list-item {
+	user-select: none;
+	cursor: pointer;
+}
+
+table {
+	width: 100%;
+}
+
+mat-icon {
+	user-select: none;
+}
