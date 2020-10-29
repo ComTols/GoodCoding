@@ -1,0 +1,19 @@
+#wrapper {
+	background-color: #ffffff;
+	padding: 2em 10%;
+}
+
+.container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	flex-direction: row;
+}
+
+.item {
+	width: 30%;
+	padding: 8px;
+	min-width: 30%;
+	margin: 10px 5px 0 0;
+	flex-grow: 2;
+}

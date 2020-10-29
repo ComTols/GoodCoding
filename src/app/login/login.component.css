@@ -1,0 +1,15 @@
+.content-center {
+	width: 345px;
+	height: 345px;
+	margin-top: -172.5px;
+	margin-left: -172.5px;
+	top: 50%;
+	left: 50%;
+	position: absolute;
+	padding: 5px 18px;
+}
+
+.login td {
+	padding-top: 1em;
+	padding-left: 1em;
+}

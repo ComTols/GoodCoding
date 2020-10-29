@@ -1,0 +1,46 @@
+<div class="content-center">
+	<mat-card class="login">
+		<mat-card-title>Einloggen</mat-card-title>
+		<form [formGroup]="loginForm" (ngSubmit)="sendLogin()">
+			<mat-card-content>
+				<p style="color: red" [hidden]="!loginFaild">Die Daten stimmen nicht. Bitte versuche es erneut!</p>
+				<table>
+					<tr>
+						<td>
+							<mat-form-field appearance="outline">
+								<mat-label>Benutzername</mat-label>
+								<input type="text" matInput required name="username" formControlName="username">
+								<mat-hint>
+									{{isUsernameValid ? 'Username entspricht den Anmeldedaten am Schulrechner.' : 'Der Benutzername ist falsch!'}}
+								</mat-hint>
+							</mat-form-field>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<mat-form-field appearance="outline">
+								<mat-label>Passwort</mat-label>
+								<input [type]="hide ? 'password' : 'text'" matInput required name="password"
+									formControlName="password">
+								<mat-icon matSuffix (click)="hide = !hide">
+									{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+								<mat-hint>
+									{{isPasswordValid ? 'Passwort entspricht den Anmeldedaten am Schulrechner.' : 'Das Passwort ist falsch!'}}
+								</mat-hint>
+							</mat-form-field>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<mat-checkbox formControlName="autoLogin">Automatisch einloggen</mat-checkbox>
+						</td>
+					</tr>
+				</table>
+
+			</mat-card-content>
+			<mat-card-actions>
+				<button type="submit" mat-raised-button>Log In</button>
+			</mat-card-actions>
+		</form>
+	</mat-card>
+</div>

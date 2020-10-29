@@ -1,0 +1,74 @@
+.app-header-bar {
+	width: 100%;
+	top: 0;
+	position: fixed;
+}
+
+.headline {
+	width: 100%;
+	height: 28em;
+	padding-left: 20%;
+}
+
+.headline h1 {
+	font-size: 80px;
+	font-weight: bold;
+	color: white;
+	padding-top: 2em;
+}
+
+.headline h2 {
+	color: white;
+	font-size: 28px;
+	padding-left: 30px;
+	margin-top: 23px;
+}
+
+.navbar {
+	justify-content: flex-start;
+	z-index: 10;
+	transition: 0.5s ease-in-out;
+
+}
+
+.navbar-top {
+	background: none;
+	color: white;
+	transition: 0.5s ease-in-out;
+
+}
+
+span {
+	padding-right: 1em;
+}
+
+.navButtons button {
+	border: 1px solid rgba(0,0,0,0);
+	font-size: 23px;
+	padding: 2px 15px;
+	margin-right: 1em;
+}
+
+.navButtons button:hover {
+	border: 1px solid black;
+	border-radius: 35px;
+	transition: 0.5s ease-in-out;
+}
+
+mat-sidenav-container {
+	background: none;	
+}
+
+mat-toolbar {
+	background-color: rgba(0,0,0,0);
+}
+
+.fix-nav {
+	position: fixed;
+	left: 0;
+}
+
+.wrapper {
+	background-color: #ffffff;
+	padding: 2em 10%;
+}
