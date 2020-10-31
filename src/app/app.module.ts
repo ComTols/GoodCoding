@@ -22,6 +22,12 @@ import { PrivacyComponent } from './privacy/privacy.component';
 import { ImprintComponent } from './imprint/imprint.component';
 import { FilesComponent } from './files/files.component';
 import { FaqComponent } from './faq/faq.component';
+import { RenameDialogComponent } from './files/rename-dialog/rename-dialog.component';
+import { DelDialogComponent } from './files/del-dialog/del-dialog.component';
+import { MoveDialogComponent } from './files/move-dialog/move-dialog.component';
+import { AllComponent } from './all/all.component';
+import { SettingsComponent } from './settings/settings.component';
+import { ContactComponent } from './contact/contact.component';
 
 const routen: Routes = [
 	{
@@ -42,6 +48,15 @@ const routen: Routes = [
 	}, {
 		path: 'faq',
 		component: FaqComponent
+	}, {
+		path: 'all',
+		component: AllComponent
+	}, {
+		path: 'settings',
+		component: SettingsComponent
+	}, {
+		path: 'contact',
+		component: ContactComponent
 	}
 ];
 
@@ -56,8 +71,15 @@ const routen: Routes = [
 		PrivacyComponent,
 		ImprintComponent,
 		FilesComponent,
-		FaqComponent
+		FaqComponent,
+		RenameDialogComponent,
+		DelDialogComponent,
+		MoveDialogComponent,
+		AllComponent,
+		SettingsComponent,
+		ContactComponent
 	],
+	entryComponents: [RenameDialogComponent, DelDialogComponent, MoveDialogComponent],
 	imports: [
 		RouterModule.forRoot(routen),
 		BrowserModule,

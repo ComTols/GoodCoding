@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>Verschieben</h2>
+<mat-dialog-content>
+	<table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+
+		<ng-container matColumnDef="type">
+			<th mat-header-cell *matHeaderCellDef></th>
+			<td mat-cell *matCellDef="let row">
+				<mat-icon>folder</mat-icon>
+			</td>
+		</ng-container>
+
+		<ng-container matColumnDef="name">
+			<th mat-header-cell *matHeaderCellDef>Ordnername</th>
+			<td mat-cell *matCellDef="let row">{{row.name}}</td>
+		</ng-container>
+
+		<ng-container matColumnDef="lastChange">
+			<th mat-header-cell *matHeaderCellDef>Letzte Änderung</th>
+			<td mat-cell *matCellDef="let row">{{row.lastChange}}</td>
+		</ng-container>
+
+		<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+		<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+	</table>
+	<p>root</p>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button mat-button mat-dialog-close mat-dialog-close="false">Abbrechen</button>
+	<button mat-button mat-dialog-close mat-dialog-close="true">Diesen Ordner wählen</button>
+</mat-dialog-actions>

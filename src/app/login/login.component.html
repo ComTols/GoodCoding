@@ -1,5 +1,5 @@
 <div class="content-center">
-	<mat-card class="login">
+	<mat-card class="login" *ngIf="!awaitingServerResponse">
 		<mat-card-title>Einloggen</mat-card-title>
 		<form [formGroup]="loginForm" (ngSubmit)="sendLogin()">
 			<mat-card-content>
@@ -43,4 +43,5 @@
 			</mat-card-actions>
 		</form>
 	</mat-card>
+	<mat-spinner *ngIf="awaitingServerResponse"></mat-spinner>
 </div>

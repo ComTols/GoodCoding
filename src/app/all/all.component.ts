@@ -1,20 +1,32 @@
-import { Router } from '@angular/router';
 import { ClientService } from './../client.service';
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-	selector: 'app-dashboard',
-	templateUrl: './dashboard.component.html',
-	styleUrls: ['./dashboard.component.css']
+	selector: 'app-all',
+	templateUrl: './all.component.html',
+	styleUrls: ['./all.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class AllComponent implements OnInit {
+
+	data: { class: string, users: { forename: string, name: string, url: string }[] }[] = [
+		{
+			class: '11a',
+			users: [
+				{ forename: 'Maximilian', name: 'Schüller', url: 'http://80.151.1.57:1180/' },
+				{ forename: 'David', name: 'Lemming', url: 'http://www.ismycomputeron.com/' }
+			]
+		}
+	];
 
 	constructor(
 		private router: Router,
 		private service: ClientService
-	) { }
+	) {
+		//TODO: Hole alle User vom Server
+	}
 
-	ngOnInit() {
+	ngOnInit(): void {
 		this.service.sendDataToServerApi('userLogin').subscribe(
 			res => {
 				if (res["acces"] == "denied") {

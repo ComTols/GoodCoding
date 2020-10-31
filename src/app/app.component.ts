@@ -1,3 +1,4 @@
+import { ClientService } from './client.service';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { HostListener } from '@angular/core';
@@ -19,7 +20,7 @@ export class AppComponent {
 			url: 'files',
 			name: 'Dateien'
 		}, {
-			url: '/phpmyadmin',
+			url: 'phpmyadmin',
 			name: 'Datenbank'
 		}, {
 			url: 'all',
@@ -61,7 +62,10 @@ export class AppComponent {
 	width: number = 100;
 	height: number = 100;
 
-	constructor(router: Router) {
+	constructor(
+		router: Router,
+		service: ClientService
+	) {
 		router.events.subscribe((url: any) => {
 			console.log(url);
 			if (url.url == undefined) {
@@ -79,6 +83,30 @@ export class AppComponent {
 					}
 					case "/files": {
 						this.site = "Dateien";
+						break;
+					}
+					case "/all": {
+						this.site = "Weitere Seiten";
+						break;
+					}
+					case "/settings": {
+						this.site = "Einstellungen";
+						break;
+					}
+					case "/contact": {
+						this.site = "Kontakt";
+						break;
+					}
+					case "/faq": {
+						this.site = "Fragen und Antworten";
+						break;
+					}
+					case "/privacy": {
+						this.site = "Datenschutzerklärung";
+						break;
+					}
+					case "/imprint": {
+						this.site = "Impressum";
 						break;
 					}
 					default: {

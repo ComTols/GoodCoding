@@ -1,0 +1,18 @@
+<h1>Weitere Seiten</h1>
+<p>Hier findest du alle Seiten von anderen Usern. Stöbere ein wenig durch die Ideen der andern und lass dich
+	inspirieren. Aber nicht zu sehr ;)</p>
+<mat-accordion>
+	<mat-expansion-panel hideToggle *ngFor="let item of data">
+		<mat-expansion-panel-header>
+			<mat-panel-title>
+				{{item.class}}
+			</mat-panel-title>
+			<mat-panel-description>
+				Sieh dir die Webseiten aus der {{item.class}} an.
+			</mat-panel-description>
+		</mat-expansion-panel-header>
+		<mat-action-list>
+			<a *ngFor="let user of item.users" mat-list-item href="{{user.url}}">{{user.forename}} {{user.name}}</a>
+		</mat-action-list>
+	</mat-expansion-panel>
+</mat-accordion>

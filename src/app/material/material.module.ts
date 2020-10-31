@@ -14,6 +14,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const material = [
 	MatFormFieldModule,
@@ -30,7 +31,8 @@ const material = [
 	MatTableModule,
 	MatMenuModule,
 	MatDividerModule,
-	MatExpansionModule
+	MatExpansionModule,
+	MatDialogModule
 ];
 
 @NgModule({

@@ -3,18 +3,18 @@ import { ClientService } from './../client.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-	selector: 'app-dashboard',
-	templateUrl: './dashboard.component.html',
-	styleUrls: ['./dashboard.component.css']
+	selector: 'app-settings',
+	templateUrl: './settings.component.html',
+	styleUrls: ['./settings.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class SettingsComponent implements OnInit {
 
 	constructor(
-		private router: Router,
-		private service: ClientService
+		public service: ClientService,
+		public router: Router
 	) { }
 
-	ngOnInit() {
+	ngOnInit(): void {
 		this.service.sendDataToServerApi('userLogin').subscribe(
 			res => {
 				if (res["acces"] == "denied") {

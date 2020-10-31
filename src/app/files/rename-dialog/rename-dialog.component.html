@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Umbenennen</h2>
+<mat-dialog-content [formGroup]="newNameGroup">
+	<p>Bitte lege einen neuen Namen für diese Datei/dieses Verzeichnis gest.</p>
+	<mat-form-field appearance="outline">
+		<mat-label>Neuer Name</mat-label>
+		<input type="text" matInput required name="newName" formControlName="newName">
+	</mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button mat-button mat-dialog-close mat-dialog-close="false">Abbrechen</button>
+	<button mat-button (click)="onClickOkay()">Okay</button>
+</mat-dialog-actions>
