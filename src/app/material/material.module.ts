@@ -15,6 +15,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 const material = [
 	MatFormFieldModule,
@@ -32,7 +34,9 @@ const material = [
 	MatMenuModule,
 	MatDividerModule,
 	MatExpansionModule,
-	MatDialogModule
+	MatDialogModule,
+	MatGridListModule,
+	MatBadgeModule
 ];
 
 @NgModule({

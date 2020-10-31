@@ -9,6 +9,36 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
+	public storageChartOptions = {
+		scaleShowVerticalLines: false,
+		responsive: true
+	}
+	public storageChartLabels = ['Belegt', 'Frei'];
+	public storageChartType = 'doughnut';
+	public storageChartLegend = false;
+	public storageChartData = [{ data: [80, 20] }];
+
+	public databaseChartOptions = {
+		scaleShowVerticalLines: false,
+		responsive: true,
+		scales: {
+			yAxes: [
+				{
+					display: false
+				}
+			],
+			xAxes: [
+				{
+					display: false
+				}
+			]
+		}
+	}
+	public databaseChartLabels = ['Datenbanken'];
+	public databaseChartType = 'bar';
+	public databaseChartLegend = false;
+	public databaseChartData = [{ data: [2], label: 'Aktiv', stack: 'a' }, { data: [1], label: 'Passiv', stack: 'a' }];
+
 	constructor(
 		private router: Router,
 		private service: ClientService
