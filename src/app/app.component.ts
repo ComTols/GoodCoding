@@ -109,6 +109,10 @@ export class AppComponent {
 						this.site = "Impressum";
 						break;
 					}
+					case "/admin/dashboard": {
+						this.site = "Administratorbereich: Dashboard";
+						break;
+					}
 					default: {
 						this.site = "";
 					}
@@ -118,11 +122,12 @@ export class AppComponent {
 				this.site = "Login";
 			}
 		});
-		console.log(router.url);  // to print only path eg:"/login"
+		console.log(router.url);
 	}
 
 	@HostListener('window:scroll', ['$event'])
 	onWindowScroll(e) {
+		if (this.isLogin == true) return;
 		let element = document.querySelector('.navbar');
 		if (window.pageYOffset > element.clientHeight) {
 			element.classList.remove('navbar-top');

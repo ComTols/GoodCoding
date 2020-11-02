@@ -9,7 +9,7 @@ import { retry } from 'rxjs/operators';
 })
 export class ClientService {
 
-	private url: string = "http://80.151.1.57:1180/api.php";
+	private url: string = "http://localhost/test.php";
 	private connectionRetry: number = 5;
 
 	constructor(

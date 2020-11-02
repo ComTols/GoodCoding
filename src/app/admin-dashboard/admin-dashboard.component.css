@@ -1,0 +1,17 @@
+.dashboard-flex {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	flex-direction: row;
+}
+
+.item {
+	width: 30%;
+	min-width: 30%;
+	margin: 10px 5px 0 0;
+	flex-grow: 2;
+}
+
+.item p {
+	text-align: center;
+}

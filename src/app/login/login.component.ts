@@ -51,7 +51,9 @@ export class LoginComponent implements OnInit {
 		//this.service.validLoginData(this);
 		this.service.sendDataToServerApi('userLogin').subscribe(
 			res => {
-				this.awaitingServerResponse = true;
+				console.log(res);
+
+				this.awaitingServerResponse = false;
 				if (res["acces"] == "denied") {
 					this.service.openSnackBar("Bitte überprüfen Sie Ihre Eingabe! Die Kombination aus Benutzername und Passwort existiert nicht.", "Okay");
 					this.loginForm.controls["password"].reset();
@@ -65,7 +67,7 @@ export class LoginComponent implements OnInit {
 				} else if (res["acces"] == "admin") {
 					console.log("Zugang akzeptiert! Adminrechte zugewiesen.");
 					this.loginFaild = false;
-					//TODO: Weiterleitung zu Admin-Bereich
+					this.router.navigate(["/admin/dashboard"]);
 				}
 			},
 			err => {

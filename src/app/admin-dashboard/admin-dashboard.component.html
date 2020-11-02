@@ -1,11 +1,4 @@
 <h1>Dashboard</h1>
-<!--<div class="container">
-	<app-storage-chart class="item"></app-storage-chart>
-	<app-storage-chart class="item"></app-storage-chart>
-	<app-database-chart class="item"></app-database-chart>
-</div> -->
-
-
 <div class="dashboard-flex">
 	<mat-card class="item">
 		<mat-card-title>Speicher</mat-card-title>
@@ -24,11 +17,10 @@
 		</mat-card-actions>
 	</mat-card>
 	<mat-card class="item">
-		<mat-card-title>Datenbank</mat-card-title>
+		<mat-card-title>Arbeitsspeicher</mat-card-title>
 		<mat-card-content>
-			<canvas baseChart [datasets]="databaseChartData" [labels]="databaseChartLabels"
-				[options]="databaseChartOptions" [legend]="databaseChartLegend"
-				[chartType]="databaseChartType"></canvas>
+			<canvas baseChart [datasets]="memoryCha rtData" [labels]="memoryChartLabels"
+				[options]="memoryChartOptions" [legend]="memoryChartLegend" [chartType]="memoryChartType"></canvas>
 			<p>
 				<b>2/3 Datenbnaken aktiv</b>
 			</p>

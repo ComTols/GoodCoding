@@ -13,6 +13,13 @@
 		</mat-nav-list>
 	</mat-sidenav>
 	<mat-sidenav-content>
+		<div class="headline">
+			<h1>Good Coding</h1>
+			<h2>{{site}}</h2>
+		</div>
+		<div class="wrapper">
+			<router-outlet></router-outlet>
+		</div>
 		<div class="app-header-bar">
 			<mat-toolbar color="primary" class="navbar navbar-top" (scroll)="onWindowScroll($event);">
 				<button mat-icon-button>
@@ -20,13 +27,6 @@
 				</button>
 				<span style="float: left;">Good Coding</span>
 			</mat-toolbar>
-		</div>
-		<div class="headline">
-			<h1>Good Coding</h1>
-			<h2>{{site}}</h2>
-		</div>
-		<div class="wrapper">
-			<router-outlet></router-outlet>
 		</div>
 	</mat-sidenav-content>
 </mat-sidenav-container>

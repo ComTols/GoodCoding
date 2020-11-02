@@ -28,6 +28,7 @@ import { MoveDialogComponent } from './files/move-dialog/move-dialog.component';
 import { AllComponent } from './all/all.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ContactComponent } from './contact/contact.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 
 const routen: Routes = [
 	{
@@ -57,6 +58,9 @@ const routen: Routes = [
 	}, {
 		path: 'contact',
 		component: ContactComponent
+	}, {
+		path: 'admin/dashboard',
+		component: AdminDashboardComponent
 	}
 ];
 
@@ -77,7 +81,8 @@ const routen: Routes = [
 		MoveDialogComponent,
 		AllComponent,
 		SettingsComponent,
-		ContactComponent
+		ContactComponent,
+		AdminDashboardComponent
 	],
 	entryComponents: [RenameDialogComponent, DelDialogComponent, MoveDialogComponent],
 	imports: [
