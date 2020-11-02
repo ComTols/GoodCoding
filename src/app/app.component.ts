@@ -11,23 +11,45 @@ import { HostListener } from '@angular/core';
 export class AppComponent {
 
 	isLogin: boolean = true;
-	site: string = "";
-	navItems: object[] = [
+	isAdmin = false;
+	site: { url: string, name: string, admin: boolean };
+	navItems: { url: string, name: string, admin: boolean }[] = [
 		{
 			url: 'dashboard',
-			name: 'Dashboard'
+			name: 'Dashboard',
+			admin: false
 		}, {
 			url: 'files',
-			name: 'Dateien'
+			name: 'Dateien',
+			admin: false
 		}, {
 			url: 'phpmyadmin',
-			name: 'Datenbank'
+			name: 'Datenbank',
+			admin: false
 		}, {
 			url: 'all',
-			name: 'Weitere Seiten'
+			name: 'Weitere Seiten',
+			admin: false
 		}, {
 			url: 'logout',
-			name: 'Log Out'
+			name: 'Log Out',
+			admin: false
+		}, {
+			url: 'admin/dashboard',
+			name: 'Dashboard',
+			admin: true
+		}, {
+			url: 'admin/sverw',
+			name: 'Schülerverwaltung',
+			admin: true
+		}, {
+			url: 'admin/workload',
+			name: 'Auslastung',
+			admin: true
+		}, {
+			url: 'admin/all',
+			name: 'Alle Seiten',
+			admin: true
 		}
 	];
 	myStyle: object = {
@@ -74,52 +96,17 @@ export class AppComponent {
 
 			if (url.url != "/") {
 				this.isLogin = false;
+				this.isAdmin = false;
 				console.log(url.url);
 
-				switch (url.url) {
-					case "/dashboard": {
-						this.site = "Dashboard";
-						break;
-					}
-					case "/files": {
-						this.site = "Dateien";
-						break;
-					}
-					case "/all": {
-						this.site = "Weitere Seiten";
-						break;
-					}
-					case "/settings": {
-						this.site = "Einstellungen";
-						break;
-					}
-					case "/contact": {
-						this.site = "Kontakt";
-						break;
-					}
-					case "/faq": {
-						this.site = "Fragen und Antworten";
-						break;
-					}
-					case "/privacy": {
-						this.site = "Datenschutzerklärung";
-						break;
-					}
-					case "/imprint": {
-						this.site = "Impressum";
-						break;
-					}
-					case "/admin/dashboard": {
-						this.site = "Administratorbereich: Dashboard";
-						break;
-					}
-					default: {
-						this.site = "";
+				for (var i = 0; i < this.navItems.length; i++) {
+					if (url.url == ("/" + this.navItems[i].url)) {
+						this.site = this.navItems[i];
 					}
 				}
 			} else {
 				this.isLogin = true;
-				this.site = "Login";
+				this.site = { name: "Login", url: "login", admin: false };
 			}
 		});
 		console.log(router.url);

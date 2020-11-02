@@ -6,16 +6,16 @@
 				<mat-icon>arrow_back</mat-icon>
 			</a>
 			<ng-container *ngFor="let item of navItems">
-				<a mat-list-item href="{{item.url}}" *ngIf="site!=item.name">{{item.name}}</a>
+				<a mat-list-item href="{{item.url}}"
+					*ngIf="site.name!=item.name && item.admin==site.admin">{{item.name}}</a>
 			</ng-container>
-
 
 		</mat-nav-list>
 	</mat-sidenav>
 	<mat-sidenav-content>
 		<div class="headline">
 			<h1>Good Coding</h1>
-			<h2>{{site}}</h2>
+			<h2><span *ngIf="site.admin">Administrator:</span>{{site.name}}</h2>
 		</div>
 		<div class="wrapper">
 			<router-outlet></router-outlet>

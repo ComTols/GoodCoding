@@ -29,6 +29,7 @@ import { AllComponent } from './all/all.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ContactComponent } from './contact/contact.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { AdminSverwComponent } from './admin-sverw/admin-sverw.component';
 
 const routen: Routes = [
 	{
@@ -61,6 +62,12 @@ const routen: Routes = [
 	}, {
 		path: 'admin/dashboard',
 		component: AdminDashboardComponent
+	}, {
+		path: 'admin/sverw',
+		component: AdminSverwComponent
+	}, {
+		path: 'admin/all',
+		component: AllComponent
 	}
 ];
 
@@ -82,7 +89,8 @@ const routen: Routes = [
 		AllComponent,
 		SettingsComponent,
 		ContactComponent,
-		AdminDashboardComponent
+		AdminDashboardComponent,
+		AdminSverwComponent
 	],
 	entryComponents: [RenameDialogComponent, DelDialogComponent, MoveDialogComponent],
 	imports: [

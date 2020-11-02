@@ -1,0 +1,12 @@
+table {
+	width: 100%;
+}
+
+.addPerson {
+	float: right;
+	font-size: 5em;
+	height: max-content;
+	width: max-content;
+	cursor: pointer;
+	user-select: none;
+}

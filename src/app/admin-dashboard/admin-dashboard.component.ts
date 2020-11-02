@@ -26,7 +26,7 @@ export class AdminDashboardComponent implements OnInit {
 	public memoryChartType = 'line';
 	public memoryChartLegend = false;
 	public memoryChartData = [{ data: [] }];
-	interval: NodeJS.Timeout;
+	interval: any;
 
 	constructor(
 		private router: Router,
@@ -87,7 +87,7 @@ export class AdminDashboardComponent implements OnInit {
 						available: number
 					}
 					*/
-					this.memoryChartData[60] = res['used'];
+					//this.memoryChartData[60] = res['used'];
 				},
 				err => {
 					console.log(err);
