@@ -30,4 +30,14 @@ export class ClientService {
 		}
 		return this.http.post(this.url, body).pipe(retry(this.connectionRetry));
 	}
+
+	public sendDataToServerApiWithData(action: string, data: {}) {
+		const body = {
+			'action': action,
+			'user': localStorage.getItem("username"),
+			'pass': localStorage.getItem("password"),
+			'data': data
+		}
+		return this.http.post(this.url, body).pipe(retry(this.connectionRetry));
+	}
 }
