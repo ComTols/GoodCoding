@@ -29,7 +29,7 @@ import { AllComponent } from './all/all.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ContactComponent } from './contact/contact.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
-import { AdminSverwComponent } from './admin-sverw/admin-sverw.component';
+import { AddClassDialogComponent, AdminSverwComponent } from './admin-sverw/admin-sverw.component';
 
 const routen: Routes = [
 	{
@@ -90,9 +90,10 @@ const routen: Routes = [
 		SettingsComponent,
 		ContactComponent,
 		AdminDashboardComponent,
-		AdminSverwComponent
+		AdminSverwComponent,
+		AddClassDialogComponent
 	],
-	entryComponents: [RenameDialogComponent, DelDialogComponent, MoveDialogComponent],
+	entryComponents: [RenameDialogComponent, DelDialogComponent, MoveDialogComponent, AddClassDialogComponent],
 	imports: [
 		RouterModule.forRoot(routen),
 		BrowserModule,

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ClientService } from '../client.service';
 
@@ -17,6 +18,13 @@ export class AdminSverwComponent implements OnInit {
 			forename: "Nikola",
 			lastname: "Tesla",
 			lastLogin: "02.11.2020 - 17:59",
+			noDatabase: 1,
+			selected: false
+		}, {
+			username: "schuelma",
+			forename: "Maximilian",
+			lastname: "Schüller",
+			lastLogin: "09.07.2020 - 21:00",
 			noDatabase: 1,
 			selected: false
 		}]
@@ -39,11 +47,12 @@ export class AdminSverwComponent implements OnInit {
 		class: new FormControl()
 	});
 	editUsers: { username: string, forename: string, lastname: string }[] = [];
-	courses: string[] = ["11a", "11b"];
 
+	
 	constructor(
 		private router: Router,
-		private service: ClientService
+		private service: ClientService,
+		private dialog: MatDialog
 	) { }
 
 	ngOnInit(): void {
@@ -68,35 +77,45 @@ export class AdminSverwComponent implements OnInit {
 		);
 	}
 
-	onAllClick(event, klasse) {
-		console.log(event);
-		console.log(klasse);
+
+	onClickCheckbox(username: string) {
+		console.log(username);
 		this.data.forEach(element => {
-			if (element.class == klasse) {
-				element.member.forEach(mem => {
-					mem.selected = true;
-				});
-			}
+			element.member.forEach(e => {
+				if (e.username == username) {
+					e.selected = !e.selected;
+					console.log(e.selected);
+				}
+			});
 		});
 	}
-
-	changeSingelCheckbox(event, row) {
-		console.log(event);
-		console.log(row);
-
-
-	}
-
 	onClickEdit(username: String) {
 		console.log(username);
 		this.isEdit = true;
 		this.data.forEach(element => {
 			element.member.forEach(e => {
 				if (e.username == username) {
-					this.editUsers.push(e);
+					this.editUsers = [e];
 				}
 			});
 		});
+	}
+	onClickEditAll(cours: String) {
+		console.log(cours);
+		this.editUsers = [];
+		this.data.forEach(element => {
+			if(element.class == cours) {
+				element.member.forEach(e => {
+					if(e.selected == true) {
+						this.editUsers.push(e);
+						console.log(this.editUsers);
+					}
+				});
+			}
+		});
+		if(this.editUsers.length > 0) {
+			this.isEdit = true;
+		}
 	}
 	onClickLock(username: string) {
 		console.log(username);
@@ -110,9 +129,34 @@ export class AdminSverwComponent implements OnInit {
 		console.log(username);
 
 	}
+	onClickAddClass() {
+		const dialogRef= this.dialog.open(AddClassDialogComponent);
+		dialogRef.afterClosed().subscribe(result => {
+				//TODO: Klasse hinzufügen
+		});
+	}
+	onClickBack() {
+		this.isEdit = false;
+	}
+	onClickSave() {
+		this.isEdit = false;
+		//TODO: An Server senden
+	}
 
 	sendEdit() {
 
 	}
 
 }
+
+@Component({
+	templateUrl: './add-class-dialog.html'
+  })
+  export class AddClassDialogComponent implements OnInit {
+  
+	constructor() { }
+  
+	ngOnInit(): void {
+	}
+  
+  }
