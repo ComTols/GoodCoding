@@ -1,5 +1,5 @@
 import { ClientService } from './client.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { HostListener } from '@angular/core';
 
@@ -85,7 +85,8 @@ export class AppComponent {
 	height: number = 100;
 
 	constructor(
-		router: Router,
+		public router: Router,
+		public route: ActivatedRoute,
 		service: ClientService
 	) {
 		router.events.subscribe((url: any) => {
@@ -121,5 +122,9 @@ export class AppComponent {
 		} else {
 			element.classList.add('navbar-top');
 		}
+	}
+
+	onClickNavItem(url: String) {
+		this.router.navigate([url], { relativeTo: this.route });
 	}
 }

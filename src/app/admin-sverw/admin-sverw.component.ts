@@ -40,15 +40,23 @@ export class AdminSverwComponent implements OnInit {
 		}]
 	}];
 	isEdit: boolean = false;
+	isNewUser: boolean = false;
 	editForm = new FormGroup({
 		username: new FormControl(),
 		forename: new FormControl(),
 		lastname: new FormControl(),
 		class: new FormControl()
 	});
+	newUserForm = new FormGroup({
+		username: new FormControl(),
+		forename: new FormControl(),
+		lastname: new FormControl(),
+		class: new FormControl(),
+		databases: new FormControl()
+	});
 	editUsers: { username: string, forename: string, lastname: string }[] = [];
 
-	
+
 	constructor(
 		private router: Router,
 		private service: ClientService,
@@ -77,8 +85,10 @@ export class AdminSverwComponent implements OnInit {
 		);
 	}
 
-
-	onClickCheckbox(username: string) {
+	onClickNewUser() {
+		this.isNewUser = true;
+	}
+	onClickCheckbox(username: String) {
 		console.log(username);
 		this.data.forEach(element => {
 			element.member.forEach(e => {
@@ -95,6 +105,8 @@ export class AdminSverwComponent implements OnInit {
 		this.data.forEach(element => {
 			element.member.forEach(e => {
 				if (e.username == username) {
+					this.onClickCheckbox(username); //Checkbox uncheck
+					console.log("unchecked!");
 					this.editUsers = [e];
 				}
 			});
@@ -104,16 +116,18 @@ export class AdminSverwComponent implements OnInit {
 		console.log(cours);
 		this.editUsers = [];
 		this.data.forEach(element => {
-			if(element.class == cours) {
+			if (element.class == cours) {
 				element.member.forEach(e => {
-					if(e.selected == true) {
+					if (e.selected == true) {
+						this.onClickCheckbox(e.username); //Checkbox uncheck
+						console.log("unchecked!");
 						this.editUsers.push(e);
 						console.log(this.editUsers);
 					}
 				});
 			}
 		});
-		if(this.editUsers.length > 0) {
+		if (this.editUsers.length > 0) {
 			this.isEdit = true;
 		}
 	}
@@ -130,9 +144,9 @@ export class AdminSverwComponent implements OnInit {
 
 	}
 	onClickAddClass() {
-		const dialogRef= this.dialog.open(AddClassDialogComponent);
+		const dialogRef = this.dialog.open(AddClassDialogComponent);
 		dialogRef.afterClosed().subscribe(result => {
-				//TODO: Klasse hinzufügen
+			//TODO: Klasse hinzufügen
 		});
 	}
 	onClickBack() {
@@ -151,12 +165,12 @@ export class AdminSverwComponent implements OnInit {
 
 @Component({
 	templateUrl: './add-class-dialog.html'
-  })
-  export class AddClassDialogComponent implements OnInit {
-  
+})
+export class AddClassDialogComponent implements OnInit {
+
 	constructor() { }
-  
+
 	ngOnInit(): void {
 	}
-  
-  }
+
+}

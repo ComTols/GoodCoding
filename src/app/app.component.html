@@ -5,10 +5,10 @@
 			<a mat-list-item (click)="drawer.toggle()">
 				<mat-icon>arrow_back</mat-icon>
 			</a>
-			<ng-container *ngFor="let item of navItems">
-				<a mat-list-item href="{{item.url}}"
+			<div *ngFor="let item of navItems">
+				<a mat-list-item [routerLink]="item.url" routerLinkActive="router-link-active"
 					*ngIf="site.name!=item.name && item.admin==site.admin">{{item.name}}</a>
-			</ng-container>
+			</div>
 
 		</mat-nav-list>
 	</mat-sidenav>
