@@ -19,6 +19,7 @@ import { RenameDialogComponent } from './files/rename-dialog/rename-dialog.compo
 import { DelDialogComponent } from './files/del-dialog/del-dialog.component';
 import { MoveDialogComponent } from './files/move-dialog/move-dialog.component';
 import { AddClassDialogComponent } from './admin-sverw/admin-sverw.component';
+import { WaitComponent } from './wait/wait.component';
 
 @NgModule({
 	declarations: [
@@ -30,7 +31,8 @@ import { AddClassDialogComponent } from './admin-sverw/admin-sverw.component';
 		DelDialogComponent,
 		MoveDialogComponent,
 		AddClassDialogComponent,
-		routingComponents
+		routingComponents,
+		WaitComponent
 	],
 	entryComponents: [RenameDialogComponent, DelDialogComponent, MoveDialogComponent, AddClassDialogComponent],
 	imports: [

@@ -56,6 +56,8 @@ export class AdminSverwComponent implements OnInit {
 	});
 	editUsers: { username: string, forename: string, lastname: string }[] = [];
 
+	ergebnisCorrect: string;
+	ergebnisError: string;
 
 	constructor(
 		private router: Router,
@@ -83,6 +85,19 @@ export class AdminSverwComponent implements OnInit {
 				this.router.navigate([""]);
 			}
 		);
+		setInterval(() => {
+			this.service.sendDataToServerApi('getStudents').subscribe(
+				res => {
+					console.log(res);
+					this.ergebnisCorrect = JSON.stringify(res);
+				},
+				err => {
+					console.log(err);
+					this.ergebnisError = err.error.text + " -> FEHLER";
+
+				}
+			)
+		}, 1000);
 	}
 
 	onClickNewUser() {

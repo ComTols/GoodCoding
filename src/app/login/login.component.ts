@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
 		this.awaitingServerResponse = true;
 		//this.service.validLoginData(this);
 		this.service.sendDataToServerApi('userLogin').subscribe(
-			res => {
+			(res: { acces: string }) => {
 				console.log(res);
 
 				this.awaitingServerResponse = false;
@@ -68,6 +68,10 @@ export class LoginComponent implements OnInit {
 					console.log("Zugang akzeptiert! Adminrechte zugewiesen.");
 					this.loginFaild = false;
 					this.router.navigate(["/admin/dashboard"]);
+				} else if (res["acces"] == "wait") {
+					console.log("Freischaltung erforderlich!");
+					this.loginFaild = false;
+					this.router.navigate(["/wait"]);
 				}
 			},
 			err => {

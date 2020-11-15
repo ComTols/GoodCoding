@@ -6,7 +6,7 @@
 				<mat-icon>arrow_back</mat-icon>
 			</a>
 			<div *ngFor="let item of navItems">
-				<a mat-list-item [routerLink]="item.url" routerLinkActive="router-link-active"
+				<a mat-list-item href="{{item.url}}"
 					*ngIf="site.name!=item.name && item.admin==site.admin">{{item.name}}</a>
 			</div>
 

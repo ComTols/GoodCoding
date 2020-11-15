@@ -58,6 +58,16 @@ export class DashboardComponent implements OnInit {
 				}
 			},
 			err => {
+				console.log("Fehler gemeldet");
+
+				//console.log(err);
+				console.log("Es ist ein Fehler aufgetreten.");
+
+				var message: string = err.error.text;
+				message.replace("\\", '');
+				console.log(message);
+				console.log("Gut");
+
 				console.log(err);
 				this.service.openSnackBar("Der Server antwortet nicht. Bitte wenden Sie sich an einen Administrator!", "Okay");
 				this.router.navigate([""]);

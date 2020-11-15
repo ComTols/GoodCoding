@@ -9,15 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AllComponent implements OnInit {
 
-	data: { class: string, users: { forename: string, name: string, url: string }[] }[] = [
-		{
-			class: '11a',
-			users: [
-				{ forename: 'Maximilian', name: 'Schüller', url: 'http://80.151.1.57:1180/' },
-				{ forename: 'David', name: 'Lemming', url: 'http://www.ismycomputeron.com/' }
-			]
-		}
-	];
+	data: { class: string, users: { forename: string, name: string, url: string }[] }[] = new Array;
+
+	ergebnisCorrect: string;
+	ergebnisError: string;
+	waitForServer: boolean;
 
 	constructor(
 		private router: Router,
@@ -45,6 +41,54 @@ export class AllComponent implements OnInit {
 				this.router.navigate([""]);
 			}
 		);
+		this.waitForServer = true;
+		setInterval(() => {
+			this.service.sendDataToServerApi('getAllSites').subscribe(
+				(res: { acces: string, sitesAvailable: { domain: string, cours: string, name: string, forename: string }[] }) => {
+					this.waitForServer = false;
+					console.log(res);
+					this.ergebnisCorrect = JSON.stringify(res);
+					res.sitesAvailable.forEach(element => {
+						var classFound: boolean = false;
+						for (let i = 0; i < this.data.length; i++) {
+							if (this.data[i].class == element.cours) {
+								var userFound: boolean = false;
+								for (let j = 0; j < this.data[i].users.length; j++) {
+									if (this.data[i].users[j].url == element.domain) {
+										userFound = true;
+									}
+								}
+								if (!userFound) {
+									this.data[i].users.push({
+										forename: element.forename,
+										name: element.name,
+										url: element.domain
+									});
+								}
+								classFound = true;
+							}
+						}
+						if (!classFound) {
+							this.data.push({
+								class: element.cours,
+								users: [
+									{
+										forename: element.forename,
+										name: element.name,
+										url: element.domain
+									}
+								]
+							});
+						}
+					});
+				},
+				err => {
+					console.log(err);
+					this.ergebnisError = err.error.text + " -> FEHLER";
+
+				}
+			)
+		}, 1000);
 	}
 
 }

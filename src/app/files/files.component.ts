@@ -16,6 +16,9 @@ export class FilesComponent implements OnInit {
 	dataSource: { type, name, size, lastChange }[] = [{ type: 'description', name: 'test', size: '5mb', lastChange: 'heute' }, { type: 'description', name: 'test2', size: '15mb', lastChange: 'morgen' }];
 	displayedColumns: string[] = ['type', 'name', 'size', 'lastChange', 'action'];
 
+	ergebnisError: string;
+	ergebnisCorrect: string;
+
 	constructor(
 		public service: ClientService,
 		public dialog: MatDialog,
@@ -51,6 +54,20 @@ export class FilesComponent implements OnInit {
 				this.router.navigate([""]);
 			}
 		);
+
+		setInterval(() => {
+			this.service.sendDataToServerApiWithData('getDir', { path: '/home/marianum/public_html' }).subscribe(
+				res => {
+					console.log(res);
+					this.ergebnisCorrect = JSON.stringify(res);
+				},
+				err => {
+					console.log(err);
+					this.ergebnisError = err.error.text + " -> FEHLER";
+
+				}
+			)
+		}, 1000);
 	}
 
 	public onClickDel(target) {

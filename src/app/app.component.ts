@@ -14,7 +14,11 @@ export class AppComponent {
 	isAdmin = false;
 	site: { url: string, name: string, admin: boolean };
 	navItems: { url: string, name: string, admin: boolean }[] = [
-		{
+		/*{
+			url: 'wait',
+			name: 'Warten auf Freischaltung',
+			admin: false
+		}, */{
 			url: 'dashboard',
 			name: 'Dashboard',
 			admin: false

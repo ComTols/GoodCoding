@@ -54,7 +54,17 @@ export class AdminDashboardComponent implements OnInit {
 				}
 			},
 			err => {
-				console.log(err);
+				console.log("Fehler gemeldet");
+
+				//console.log(err);
+				console.log("Es ist ein Fehler aufgetreten.");
+
+				var message: string = err.error.text;
+				message.replace("\\", '');
+				console.log(message);
+				console.log("Gut");
+
+				//console.log(err);
 				this.service.openSnackBar("Der Server antwortet nicht. Bitte wenden Sie sich an einen Administrator!", "Okay");
 				this.router.navigate([""]);
 			}
@@ -71,6 +81,37 @@ export class AdminDashboardComponent implements OnInit {
 		this.interval = setInterval(() => {
 			this.service.sendDataToServerApi('memory').subscribe(
 				res => {
+					console.log(res);
+
+					if (res["acces"] != "admin") {
+						console.log("Zugang verweigert! Keine Admin-Rechte!");
+						this.service.openSnackBar("Sie haben keine Administrator-Rechte! Bitte wenden Sie sich an einen Administrator, um Rechte zu erhalten.", "Okay");
+						this.router.navigate([""]);
+						return;
+					}
+					/*
+					{
+						total: number,
+						used: number,
+						free: number,
+						shared: number:
+						buffCache: number,
+						available: number
+					}
+					*/
+					//this.memoryChartData[60] = res['used'];
+				},
+				err => {
+					console.log(err);
+					this.service.openSnackBar("Der Server antwortet nicht. Bitte wenden Sie sich an einen Administrator!", "Okay");
+					//this.router.navigate([""]);
+					clearInterval(this.interval);
+				}
+			);
+			this.service.sendDataToServerApi('cpu').subscribe(
+				res => {
+					console.log(res);
+
 					if (res["acces"] != "admin") {
 						console.log("Zugang verweigert! Keine Admin-Rechte!");
 						this.service.openSnackBar("Sie haben keine Administrator-Rechte! Bitte wenden Sie sich an einen Administrator, um Rechte zu erhalten.", "Okay");
