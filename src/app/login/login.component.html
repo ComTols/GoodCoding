@@ -32,6 +32,21 @@
 					</tr>
 					<tr>
 						<td>
+							<mat-form-field appearance="outline">
+								<mat-label>Klasse</mat-label>
+								<mat-select formControlName="cours" name="cours" required>
+									<mat-option *ngFor="let option of options" [value]="option">
+										{{option}}
+									</mat-option>
+								</mat-select>
+								<mat-hint>
+									{{isCoursValid ? 'Bitte wähle deine Klasse aus.' : 'Deine Klasse ist nicht korrekt!'}}
+								</mat-hint>
+							</mat-form-field>
+						</td>
+					</tr>
+					<tr>
+						<td>
 							<mat-checkbox formControlName="autoLogin">Automatisch einloggen</mat-checkbox>
 						</td>
 					</tr>

@@ -28,7 +28,8 @@ export class ClientService {
 		const body = {
 			'action': action,
 			'user': localStorage.getItem("username"),
-			'pass': localStorage.getItem("password")
+			'pass': localStorage.getItem("password"),
+			'cours': localStorage.getItem("cours")
 		}
 		return this.http.post(this.url, body).pipe(retry(this.connectionRetry));
 	}
@@ -38,6 +39,7 @@ export class ClientService {
 			'action': action,
 			'user': localStorage.getItem("username"),
 			'pass': localStorage.getItem("password"),
+			'cours': localStorage.getItem("cours"),
 			'data': data
 		}
 		return this.http.post(this.url, body).pipe(retry(this.connectionRetry));

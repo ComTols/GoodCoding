@@ -18,6 +18,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 const material = [
 	MatFormFieldModule,
@@ -38,7 +39,8 @@ const material = [
 	MatDialogModule,
 	MatGridListModule,
 	MatBadgeModule,
-	MatSelectModule
+	MatSelectModule,
+	MatAutocompleteModule
 ];
 
 @NgModule({

@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit {
 	hide = true;
 	isPasswordValid = true;
 	isUsernameValid = true;
+	isCoursValid = true;
 	loginFaild = false;
 	awaitingServerResponse: boolean = false;
 	loginUserData = {};
@@ -20,13 +21,39 @@ export class LoginComponent implements OnInit {
 	loginForm = new FormGroup({
 		username: new FormControl(null, [Validators.required, Validators.minLength(3)]),
 		password: new FormControl(null, Validators.required),
+		cours: new FormControl(null, Validators.required),
 		autoLogin: new FormControl()
 	});
+
+	options: string[] = new Array;
 
 	constructor(
 		private router: Router,
 		private service: ClientService,
-	) { }
+	) {
+		for (let i = 5; i <= 13; i++) {
+			for (let index = 0; index < 5; index++) {
+				switch (index) {
+					case 0:
+						this.options.push(i + "a")
+						break;
+					case 1:
+						this.options.push(i + "b")
+						break;
+					case 2:
+						this.options.push(i + "c")
+						break;
+					case 3:
+						this.options.push(i + "d")
+						break;
+					case 4:
+						this.options.push(i + "e")
+						break;
+				}
+			}
+		}
+		this.options.push("teachers");
+	}
 
 	sendLogin() {
 		if (this.loginForm.status != "VALID") {
@@ -47,6 +74,7 @@ export class LoginComponent implements OnInit {
 		//this.service.setLoginData(this.loginForm.value['username'], this.loginForm.value['password']);
 		localStorage.setItem("username", this.loginForm.value['username']);
 		localStorage.setItem("password", this.loginForm.value['password']);
+		localStorage.setItem("cours", this.loginForm.value['cours']);
 		this.awaitingServerResponse = true;
 		//this.service.validLoginData(this);
 		this.service.sendDataToServerApi('userLogin').subscribe(

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -11,36 +11,11 @@ import { ClientService } from '../client.service';
 })
 export class AdminSverwComponent implements OnInit {
 
-	data: { class: string, member: { username: string, forename: string, lastname: string, lastLogin: string, noDatabase: number, selected: boolean }[] }[] = [{
-		class: "teacher",
-		member: [{
-			username: "tesla",
-			forename: "Nikola",
-			lastname: "Tesla",
-			lastLogin: "02.11.2020 - 17:59",
-			noDatabase: 1,
-			selected: false
-		}, {
-			username: "schuelma",
-			forename: "Maximilian",
-			lastname: "Schüller",
-			lastLogin: "09.07.2020 - 21:00",
-			noDatabase: 1,
-			selected: false
-		}]
-	}, {
-		class: "12c",
-		member: [{
-			username: "schuelma",
-			forename: "Maximilian",
-			lastname: "Schüller",
-			lastLogin: "09.07.2020 - 21:00",
-			noDatabase: 1,
-			selected: false
-		}]
-	}];
+	data: { class: string, member: { username: string, forename: string, lastname: string, lastLogin: string, noDatabase: number, selected: boolean }[] }[] = [];
+	dataWaiting: { username: string, lastLogin: string }[] = [];
 	isEdit: boolean = false;
 	isNewUser: boolean = false;
+	isAllowAccess: boolean = false;
 	editForm = new FormGroup({
 		username: new FormControl(),
 		forename: new FormControl(),
@@ -58,6 +33,7 @@ export class AdminSverwComponent implements OnInit {
 
 	ergebnisCorrect: string;
 	ergebnisError: string;
+	awaitServerResponse: boolean;
 
 	constructor(
 		private router: Router,
@@ -85,11 +61,73 @@ export class AdminSverwComponent implements OnInit {
 				this.router.navigate([""]);
 			}
 		);
+		this.awaitServerResponse = true;
 		setInterval(() => {
 			this.service.sendDataToServerApi('getStudents').subscribe(
-				res => {
+				(res: { acces: string, waitingUsers: [{ username: string, lastLogin: string }], activeUsers: [{ username: string, cours: string, databases: number, lastLogin: string, access: string, name: string, forename: string, block: string }] }) => {
+					console.log(this.dataWaiting);
 					console.log(res);
+					this.awaitServerResponse = false;
 					this.ergebnisCorrect = JSON.stringify(res);
+					//Wartende Nutzer
+					if (res.waitingUsers.length > 0) {
+						var isAlreadyIn: boolean = false;
+						for (let i = 0; i < res.waitingUsers.length; i++) {
+							for (let j = 0; j < this.dataWaiting.length; j++) {
+								if (this.dataWaiting[j].username == res.waitingUsers[i].username) {
+									isAlreadyIn = true;
+								}
+							}
+							if (!isAlreadyIn) {
+								this.dataWaiting.push(res.waitingUsers[i]);
+							}
+						}
+					}
+
+					//Aktive Nutzer
+					if (res.activeUsers.length > 0) {
+						var isAlreadyIn: boolean = false;
+						for (let i = 0; i < res.activeUsers.length; i++) {
+							for (let j = 0; j < this.data.length; j++) {
+								if (this.data[j].class == res.activeUsers[i].cours) {
+									for (let k = 0; k < this.data[j].member.length; k++) {
+										if (this.data[j].member[k].username == res.activeUsers[i].username) {
+											isAlreadyIn = true;
+										}
+									}
+								}
+							}
+							if (!isAlreadyIn) {
+								var foundClass: boolean = false;
+								for (let j = 0; j < this.data.length; j++) {
+									if (this.data[j].class = res.activeUsers[i].cours) {
+										this.data[j].member.push({
+											username: res.activeUsers[i].username,
+											forename: res.activeUsers[i].forename,
+											lastname: res.activeUsers[i].name,
+											lastLogin: res.activeUsers[i].lastLogin,
+											noDatabase: res.activeUsers[i].databases,
+											selected: false
+										});
+										foundClass = true;
+									}
+								}
+								if (!foundClass) {
+									this.data.push({
+										class: res.activeUsers[i].cours,
+										member: [{
+											username: res.activeUsers[i].username,
+											forename: res.activeUsers[i].forename,
+											lastname: res.activeUsers[i].name,
+											lastLogin: res.activeUsers[i].lastLogin,
+											noDatabase: res.activeUsers[i].databases,
+											selected: false
+										}]
+									});
+								}
+							}
+						}
+					}
 				},
 				err => {
 					console.log(err);
@@ -97,7 +135,7 @@ export class AdminSverwComponent implements OnInit {
 
 				}
 			)
-		}, 1000);
+		}, 7000);
 	}
 
 	onClickNewUser() {
@@ -113,6 +151,16 @@ export class AdminSverwComponent implements OnInit {
 				}
 			});
 		});
+	}
+
+	onClickAllowAccess(username: string) {
+		console.log(username);
+		this.editUsers = [{
+			username: username,
+			forename: "",
+			lastname: ""
+		}];
+		this.isEdit = true;
 	}
 	onClickEdit(username: String) {
 		console.log(username);
@@ -162,6 +210,13 @@ export class AdminSverwComponent implements OnInit {
 		const dialogRef = this.dialog.open(AddClassDialogComponent);
 		dialogRef.afterClosed().subscribe(result => {
 			//TODO: Klasse hinzufügen
+			console.log(result);
+			if (result != false) {
+				this.data.push({
+					class: result,
+					member: []
+				})
+			}
 		});
 	}
 	onClickBack() {
@@ -169,7 +224,10 @@ export class AdminSverwComponent implements OnInit {
 	}
 	onClickSave() {
 		this.isEdit = false;
-		//TODO: An Server senden
+		this.editForm.get
+		this.service.sendDataToServerApiWithData("unlockNewUser", {
+
+		})
 	}
 
 	sendEdit() {
@@ -182,6 +240,8 @@ export class AdminSverwComponent implements OnInit {
 	templateUrl: './add-class-dialog.html'
 })
 export class AddClassDialogComponent implements OnInit {
+
+
 
 	constructor() { }
 
