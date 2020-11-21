@@ -12,24 +12,14 @@ import { ClientService } from '../client.service';
 export class AdminSverwComponent implements OnInit {
 
 	data: { class: string, member: { username: string, forename: string, lastname: string, lastLogin: string, noDatabase: number, selected: boolean }[] }[] = [];
-	dataWaiting: { username: string, lastLogin: string }[] = [];
+	dataWaiting: { username: string, lastLogin: string, selected: boolean }[] = [];
+	editUsers: { username: string, forename: string, lastname: string }[] = [];
+	giveAccesToUsers: string[] = [];
+	refresh: string[] = [];
+
 	isEdit: boolean = false;
 	isNewUser: boolean = false;
 	isAllowAccess: boolean = false;
-	editForm = new FormGroup({
-		username: new FormControl(),
-		forename: new FormControl(),
-		lastname: new FormControl(),
-		class: new FormControl()
-	});
-	newUserForm = new FormGroup({
-		username: new FormControl(),
-		forename: new FormControl(),
-		lastname: new FormControl(),
-		class: new FormControl(),
-		databases: new FormControl()
-	});
-	editUsers: { username: string, forename: string, lastname: string }[] = [];
 
 	ergebnisCorrect: string;
 	ergebnisError: string;
@@ -65,21 +55,26 @@ export class AdminSverwComponent implements OnInit {
 		setInterval(() => {
 			this.service.sendDataToServerApi('getStudents').subscribe(
 				(res: { acces: string, waitingUsers: [{ username: string, lastLogin: string }], activeUsers: [{ username: string, cours: string, databases: number, lastLogin: string, access: string, name: string, forename: string, block: string }] }) => {
-					console.log(this.dataWaiting);
-					console.log(res);
+					//console.log(this.data);
+					//console.log(res);
 					this.awaitServerResponse = false;
 					this.ergebnisCorrect = JSON.stringify(res);
 					//Wartende Nutzer
 					if (res.waitingUsers.length > 0) {
-						var isAlreadyIn: boolean = false;
 						for (let i = 0; i < res.waitingUsers.length; i++) {
+							var isAlreadyIn: boolean = false;
 							for (let j = 0; j < this.dataWaiting.length; j++) {
 								if (this.dataWaiting[j].username == res.waitingUsers[i].username) {
 									isAlreadyIn = true;
 								}
 							}
 							if (!isAlreadyIn) {
-								this.dataWaiting.push(res.waitingUsers[i]);
+								this.dataWaiting.push({
+									username: res.waitingUsers[i].username,
+									lastLogin: res.waitingUsers[i].lastLogin,
+									selected: false
+								});
+								this.refresh = ["refresh"];
 							}
 						}
 					}
@@ -100,7 +95,7 @@ export class AdminSverwComponent implements OnInit {
 							if (!isAlreadyIn) {
 								var foundClass: boolean = false;
 								for (let j = 0; j < this.data.length; j++) {
-									if (this.data[j].class = res.activeUsers[i].cours) {
+									if (this.data[j].class == res.activeUsers[i].cours) {
 										this.data[j].member.push({
 											username: res.activeUsers[i].username,
 											forename: res.activeUsers[i].forename,
@@ -152,15 +147,41 @@ export class AdminSverwComponent implements OnInit {
 			});
 		});
 	}
+	onClickCheckboxWaitingUser(username: String) {
+		console.log(username);
+		this.dataWaiting.forEach(element => {
+			if (element.username == username) {
+				element.selected = !element.selected;
+				console.log(element.selected);
+			}
+		});
+	}
 
 	onClickAllowAccess(username: string) {
+		this.giveAccesToUsers = [username]
+		this.isAllowAccess = true;
+	}
+	onClickAllowAccessAll() {
+		this.giveAccesToUsers = [];
+		this.dataWaiting.forEach(e => {
+			if (e.selected) {
+				this.giveAccesToUsers.push(e.username);
+				e.selected = false;
+			}
+		});
+		if (this.giveAccesToUsers.length > 0) {
+			this.isAllowAccess = true;
+		}
+	}
+	onClickDeleteWaitingUser(username: string) {
 		console.log(username);
-		this.editUsers = [{
-			username: username,
-			forename: "",
-			lastname: ""
-		}];
-		this.isEdit = true;
+	}
+	onClickDeleteWaitingUserAll() {
+		this.dataWaiting.forEach(e => {
+			if (e.selected) {
+				e.selected = !e.selected;
+			}
+		});
 	}
 	onClickEdit(username: String) {
 		console.log(username);
@@ -206,32 +227,62 @@ export class AdminSverwComponent implements OnInit {
 		console.log(username);
 
 	}
-	onClickAddClass() {
-		const dialogRef = this.dialog.open(AddClassDialogComponent);
-		dialogRef.afterClosed().subscribe(result => {
-			//TODO: Klasse hinzufügen
-			console.log(result);
-			if (result != false) {
-				this.data.push({
-					class: result,
-					member: []
-				})
+	finishEdit(event: { username: string, forename: string, lastname: string }[]) {
+		this.isEdit = false;
+		if (event == undefined) {
+			console.log("Bearbeiten abgebrochen!");
+			return;
+		}
+		console.log("Sende event zum Server:");
+		console.log(event);
+		this.awaitServerResponse = true;
+		/*this.service.sendDataToServerApiWithData("editUser", { editUsers: event }).subscribe(
+			res => {
+				this.awaitServerResponse = false;
+			},
+			err => {
+				this.awaitServerResponse = false;
+				this.service.openSnackBar("Der Benutzer konnte nicht bearbeitet werden. Bitte wenden Sie sich an einen Administartor!", "OK");
 			}
-		});
-	}
-	onClickBack() {
-		this.isEdit = false;
-	}
-	onClickSave() {
-		this.isEdit = false;
-		this.editForm.get
-		this.service.sendDataToServerApiWithData("unlockNewUser", {
-
-		})
+		);*/
 	}
 
-	sendEdit() {
+	finishAdding(event) {
+		this.isNewUser = false;
+		if (event == undefined) {
+			console.log("Hinzufügen abgebrochen!");
+			return;
+		}
+		console.log("Sende event zum Server:");
+		console.log(event);
+		/*this.service.sendDataToServerApiWithData("addUser", { addedUsers: event }).subscribe(
+		res => {
+			this.awaitServerResponse = false;
+		},
+			err => {
+				this.awaitServerResponse = false;
+				this.service.openSnackBar("Der Benutzer konnte nicht hinzugefügt werden. Bitte wenden Sie sich an einen Administartor!", "OK");
+			}
+		); */
+	}
 
+	finishAllowing(event) {
+		this.isAllowAccess = false;
+		if (event == undefined) {
+			console.log("Erlauben abgebrochen");
+			return;
+		}
+		console.log("Sende event zum Server:");
+		console.log(event);
+		/*this.service.sendDataToServerApiWithData("allowUsers", { allowedUsers: event }).subscribe(
+		res => {
+			this.awaitServerResponse = false;
+		},
+			err => {
+				this.awaitServerResponse = false;
+				this.service.openSnackBar("Der Zugang konnte dem Nutzer nicht erlaubt werden. Bitte wenden Sie sich an einen Administartor!", "OK");
+			}
+		);*/
 	}
 
 }

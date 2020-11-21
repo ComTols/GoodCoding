@@ -20,6 +20,9 @@ import { DelDialogComponent } from './files/del-dialog/del-dialog.component';
 import { MoveDialogComponent } from './files/move-dialog/move-dialog.component';
 import { AddClassDialogComponent } from './admin-sverw/admin-sverw.component';
 import { WaitComponent } from './wait/wait.component';
+import { EditUserComponent } from './admin-sverw/edit-user/edit-user.component';
+import { NewUserComponent } from './admin-sverw/new-user/new-user.component';
+import { AllowUserComponent } from './admin-sverw/allow-user/allow-user.component';
 
 @NgModule({
 	declarations: [
@@ -32,7 +35,10 @@ import { WaitComponent } from './wait/wait.component';
 		MoveDialogComponent,
 		AddClassDialogComponent,
 		routingComponents,
-		WaitComponent
+		WaitComponent,
+		EditUserComponent,
+		NewUserComponent,
+		AllowUserComponent
 	],
 	entryComponents: [RenameDialogComponent, DelDialogComponent, MoveDialogComponent, AddClassDialogComponent],
 	imports: [

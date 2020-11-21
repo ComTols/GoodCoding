@@ -1,0 +1,45 @@
+<!--<form [formGroup]="editForm" (ngSubmit)="sendEdit()">-->
+<div class="flexframe">
+	<mat-card *ngFor="let user of editArray">
+		<mat-card-header>
+			<mat-icon mat-card-avatar>account_circle</mat-icon>
+			<mat-card-title>{{user.username}}</mat-card-title>
+			<mat-card-subtitle>Benutzername</mat-card-subtitle>
+		</mat-card-header>
+		<mat-card-content>
+			<p>
+				<mat-form-field appearance="outline">
+					<mat-label>Vorname</mat-label>
+					<input matInput placeholder="Vorname" name="forename" value="{{user.forename}}">
+				</mat-form-field>
+			</p>
+			<p>
+				<mat-form-field appearance="outline">
+					<mat-label>Nachname</mat-label>
+					<input matInput placeholder="Nachname" name="lastname" value="{{user.lastname}}">
+				</mat-form-field>
+			</p>
+			<p>
+				<mat-form-field appearance="outline">
+					<mat-label>Klasse/Kurs</mat-label>
+					<mat-select name="class">
+						<mat-option *ngFor="let course of coursList" [value]="course">
+							{{course.class}}
+						</mat-option>
+					</mat-select>
+				</mat-form-field><button mat-icon-button (click)="onClickAddClass()">
+					<mat-icon>add_circle</mat-icon>
+				</button>
+			</p>
+		</mat-card-content>
+		<mat-card-actions *ngIf="editArray?.length == 1">
+			<button mat-button (click)="onClickBack()">Zurück</button>
+			<button mat-button (click)="onClickSave()">Speichern</button>
+		</mat-card-actions>
+	</mat-card>
+</div>
+<!--</form> -->
+<div *ngIf="editArray?.length > 1" id="multiSelectButtons">
+	<button mat-raised-button (click)="onClickBack()">Zurück</button>
+	<button mat-raised-button (click)="onClickSave()">Speichern</button>
+</div>

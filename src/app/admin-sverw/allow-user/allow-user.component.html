@@ -1,0 +1,49 @@
+<div class="flexframe">
+	<mat-card *ngFor="let item of allowUsers">
+		<mat-card-header>
+			<mat-icon mat-card-avatar>account_circle</mat-icon>
+			<mat-card-title>{{item}}</mat-card-title>
+			<mat-card-subtitle>Freigeben</mat-card-subtitle>
+		</mat-card-header>
+		<mat-card-content>
+			<p>
+				<mat-form-field appearance="outline">
+					<mat-label>Vorname</mat-label>
+					<input matInput placeholder="Vorname" name="forename" (input)="forename(item,$event)">
+				</mat-form-field>
+			</p>
+			<p>
+				<mat-form-field appearance="outline">
+					<mat-label>Nachname</mat-label>
+					<input matInput placeholder="Nachname" name="lastname" (input)="lastname(item,$event)">
+				</mat-form-field>
+			</p>
+			<p>
+				<mat-form-field appearance="outline">
+					<mat-label>Klasse/Kurs</mat-label>
+					<mat-select name="class">
+						<mat-option *ngFor="let course of courses" [value]="course">
+							{{course.class}}
+						</mat-option>
+					</mat-select>
+				</mat-form-field><button mat-icon-button (click)="onClickAddClass()">
+					<mat-icon>add_circle</mat-icon>
+				</button>
+			</p>
+			<p>
+				<mat-form-field appearance="outline">
+					<mat-label>Datenbanken</mat-label>
+					<input matInput type="number" name="databases" (input)="databases(item,$event)">
+				</mat-form-field>
+			</p>
+		</mat-card-content>
+		<mat-card-actions *ngIf="allowUsers?.length == 1">
+			<button mat-button (click)="onClickBack()">Zurück</button>
+			<button mat-button (click)="onClickSave()">Speichern</button>
+		</mat-card-actions>
+	</mat-card>
+</div>
+<div *ngIf="allowUsers?.length > 1" id="multiSelectButtons">
+	<button mat-raised-button (click)="onClickBack()">Zurück</button>
+	<button mat-raised-button (click)="onClickSave()">Speichern</button>
+</div>

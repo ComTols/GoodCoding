@@ -54,6 +54,10 @@ export class AppComponent {
 			url: 'admin/all',
 			name: 'Alle Seiten',
 			admin: true
+		}, {
+			url: 'privacy',
+			name: 'Datenschutz',
+			admin: false
 		}
 	];
 	myStyle: object = {

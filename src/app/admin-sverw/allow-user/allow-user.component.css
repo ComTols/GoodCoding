@@ -1,0 +1,26 @@
+mat-card-content p {
+	width: max-content;
+}
+
+mat-card-content {
+	width: min-content;
+}
+
+mat-card {
+	width: min-content;
+	margin: 1em 0;
+}
+
+.flexframe {
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+}
+
+mat-card-header mat-icon {
+	font-size: 45px;
+}
+
+#multiSelectButtons button {
+	margin-right: 1em;
+}
