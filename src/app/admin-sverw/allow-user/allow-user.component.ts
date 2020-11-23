@@ -9,7 +9,7 @@ import { AddClassDialogComponent } from '../admin-sverw.component';
 })
 export class AllowUserComponent implements OnInit {
 
-	users: { username: string, forename: string, lastname: string, databases: number }[] = [];
+	users: { username: string, forename: string, lastname: string, databases: number, cours: string }[] = [];
 
 	@Input() allowUsers: string[];
 	@Input() courses: {}[];
@@ -54,7 +54,8 @@ export class AllowUserComponent implements OnInit {
 				username: username,
 				forename: event.target.value,
 				lastname: "",
-				databases: 0
+				databases: 0,
+				cours: ""
 			});
 		}
 	}
@@ -72,7 +73,8 @@ export class AllowUserComponent implements OnInit {
 				username: username,
 				forename: "",
 				lastname: event.target.value,
-				databases: 0
+				databases: 0,
+				cours: ""
 			});
 		}
 	}
@@ -90,7 +92,27 @@ export class AllowUserComponent implements OnInit {
 				username: username,
 				forename: "",
 				lastname: "",
-				databases: event.target.value
+				databases: event.target.value,
+				cours: ""
+			});
+		}
+	}
+
+	course(username: string, event) {
+		var wasFound: boolean = false;
+		this.users.forEach(e => {
+			if (e.username == username) {
+				e.cours = event.value.class;
+				wasFound = true;
+			}
+		});
+		if (!wasFound) {
+			this.users.push({
+				username: username,
+				forename: "",
+				lastname: "",
+				databases: event.value.class,
+				cours: ""
 			});
 		}
 	}

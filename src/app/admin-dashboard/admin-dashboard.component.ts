@@ -81,7 +81,7 @@ export class AdminDashboardComponent implements OnInit {
 		this.interval = setInterval(() => {
 			this.service.sendDataToServerApi('memory').subscribe(
 				res => {
-					console.log(res);
+					//console.log(res);
 
 					if (res["acces"] != "admin") {
 						console.log("Zugang verweigert! Keine Admin-Rechte!");
@@ -110,7 +110,7 @@ export class AdminDashboardComponent implements OnInit {
 			);
 			this.service.sendDataToServerApi('cpu').subscribe(
 				res => {
-					console.log(res);
+					//console.log(res);
 
 					if (res["acces"] != "admin") {
 						console.log("Zugang verweigert! Keine Admin-Rechte!");

@@ -19,6 +19,8 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatChipsModule } from '@angular/material/chips';
 
 const material = [
 	MatFormFieldModule,
@@ -40,7 +42,9 @@ const material = [
 	MatGridListModule,
 	MatBadgeModule,
 	MatSelectModule,
-	MatAutocompleteModule
+	MatAutocompleteModule,
+	MatProgressBarModule,
+	MatChipsModule
 ];
 
 @NgModule({

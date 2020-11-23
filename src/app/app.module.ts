@@ -23,6 +23,9 @@ import { WaitComponent } from './wait/wait.component';
 import { EditUserComponent } from './admin-sverw/edit-user/edit-user.component';
 import { NewUserComponent } from './admin-sverw/new-user/new-user.component';
 import { AllowUserComponent } from './admin-sverw/allow-user/allow-user.component';
+import { DeleteDialogComponent } from './admin-sverw/dialogs/delete-dialog/delete-dialog.component';
+import { LockDialogComponent } from './admin-sverw/dialogs/lock-dialog/lock-dialog.component';
+import { PermittAdminDialogComponent } from './admin-sverw/dialogs/permitt-admin-dialog/permitt-admin-dialog.component';
 
 @NgModule({
 	declarations: [
@@ -38,9 +41,12 @@ import { AllowUserComponent } from './admin-sverw/allow-user/allow-user.componen
 		WaitComponent,
 		EditUserComponent,
 		NewUserComponent,
-		AllowUserComponent
+		AllowUserComponent,
+		DeleteDialogComponent,
+		LockDialogComponent,
+		PermittAdminDialogComponent
 	],
-	entryComponents: [RenameDialogComponent, DelDialogComponent, MoveDialogComponent, AddClassDialogComponent],
+	entryComponents: [RenameDialogComponent, DelDialogComponent, MoveDialogComponent, AddClassDialogComponent, DeleteDialogComponent, LockDialogComponent, PermittAdminDialogComponent],
 	imports: [
 		BrowserModule,
 		HttpClientModule,

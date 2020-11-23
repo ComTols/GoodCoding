@@ -12,6 +12,7 @@ export class AppComponent {
 
 	isLogin: boolean = true;
 	isAdmin = false;
+	isWait = false;
 	site: { url: string, name: string, admin: boolean };
 	navItems: { url: string, name: string, admin: boolean }[] = [
 		/*{
@@ -103,9 +104,19 @@ export class AppComponent {
 				return;
 			}
 
-			if (url.url != "/") {
+			if (url.url == "/wait") {
 				this.isLogin = false;
 				this.isAdmin = false;
+				this.isWait = true;
+				this.site = {
+					url: 'wait',
+					name: 'Warten auf Freischaltung',
+					admin: false
+				};
+			} else if (url.url != "/") {
+				this.isLogin = false;
+				this.isAdmin = false;
+				this.isWait = false;
 				console.log(url.url);
 
 				for (var i = 0; i < this.navItems.length; i++) {

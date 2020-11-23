@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>Wirklich sperren?</h2>
+<mat-dialog-content>
+	<p *ngIf="isSingel">Sie sind dabei, diesen User zu sperren.</p>
+	<p *ngIf="isMulti">Sie sind dabei, diese User zu sperren.</p>
+	<p>Das Benutzerkonto wird nicht gelöscht und alle Daten bleiben erhalten. Die Webseite des Benutzers kann jedoch
+		nicht mehr aufgerufen werden und auch alle Zugänge (FTP, MySQL, usw.) werden gesperrt.</p>
+	<p *ngIf="isSingel">Sind Sie sicher, dass Sie <span style="color: green; font-weight: bold;">{{singelData}}</span>
+		sperren möchten?
+	</p>
+	<p *ngIf="isMulti">Folgende Benutzerkonten werden gesperrt:</p>
+	<mat-chip-list *ngIf="isMulti">
+		<mat-chip *ngFor="let item of multiData">{{item}}</mat-chip>
+	</mat-chip-list>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button mat-button mat-dialog-close mat-dialog-close="false">Nein</button>
+	<button mat-button mat-dialog-close mat-dialog-close="true">Ja</button>
+</mat-dialog-actions>

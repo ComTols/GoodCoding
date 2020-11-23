@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>Administratorrechte vergeben</h2>
+<mat-dialog-content>
+	<p *ngIf="isSingel">Sie sind dabei, diesem User Administratorrechte zu geben.</p>
+	<p *ngIf="isMulti">Sie sind dabei, diesen Usern Administratorrechte zu geben.</p>
+	<p>Mit Administratorrechten kann der Benutzer alle anderen Benutzer verwalten, löschen, blockieren und alle Daten
+		einsehen. Diese Berechtigung sollte Lehrpersonen vorbehalten sein.</p>
+	<p *ngIf="isSingel">Sind Sie sicher, dass Sie <span style="color: green; font-weight: bold;">{{singelData}}</span>
+		Administratorrechte gewähren möchten?
+	</p>
+	<p *ngIf="isMulti">Folgenden Benutzerkonten werden Administratorrechte gewährt:</p>
+	<mat-chip-list *ngIf="isMulti">
+		<mat-chip *ngFor="let item of multiData">{{item}}</mat-chip>
+	</mat-chip-list>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button mat-button mat-dialog-close mat-dialog-close="false">Nein</button>
+	<button mat-button mat-dialog-close mat-dialog-close="true">Ja</button>
+</mat-dialog-actions>

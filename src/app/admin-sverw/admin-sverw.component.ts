@@ -1,3 +1,6 @@
+import { PermittAdminDialogComponent } from './dialogs/permitt-admin-dialog/permitt-admin-dialog.component';
+import { LockDialogComponent } from './dialogs/lock-dialog/lock-dialog.component';
+import { DeleteDialogComponent } from './dialogs/delete-dialog/delete-dialog.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -174,12 +177,26 @@ export class AdminSverwComponent implements OnInit {
 		}
 	}
 	onClickDeleteWaitingUser(username: string) {
-		console.log(username);
+		const dialogRef = this.dialog.open(DeleteDialogComponent, { data: { mode: "singly", user: username } });
+		dialogRef.afterClosed().subscribe(res => {
+			if (res) {
+				//TODO: Benutzer löschen
+			}
+		});
 	}
 	onClickDeleteWaitingUserAll() {
+		var users: string[] = [];
 		this.dataWaiting.forEach(e => {
 			if (e.selected) {
+				users.push(e.username);
 				e.selected = !e.selected;
+			}
+		});
+		if (users.length == 0) return;
+		const dialogRef = this.dialog.open(DeleteDialogComponent, { data: { mode: "multi", users: users } });
+		dialogRef.afterClosed().subscribe(res => {
+			if (res) {
+				//TODO: Benutzer löschen
 			}
 		});
 	}
@@ -216,16 +233,28 @@ export class AdminSverwComponent implements OnInit {
 		}
 	}
 	onClickLock(username: string) {
-		console.log(username);
-
+		const dialogRef = this.dialog.open(LockDialogComponent, { data: { mode: "singly", user: username } });
+		dialogRef.afterClosed().subscribe(res => {
+			if (res) {
+				//TODO: Benutzer sperren
+			}
+		});
 	}
 	onClickDelete(username: string) {
-		console.log(username);
-
+		const dialogRef = this.dialog.open(DeleteDialogComponent, { data: { mode: "singly", user: username } });
+		dialogRef.afterClosed().subscribe(res => {
+			if (res) {
+				//TODO: Benutzer löschen
+			}
+		});
 	}
 	onClickAdmin(username: string) {
-		console.log(username);
-
+		const dialogRef = this.dialog.open(PermittAdminDialogComponent, { data: { mode: "singly", user: username } });
+		dialogRef.afterClosed().subscribe(res => {
+			if (res) {
+				//TODO: Benutzer löschen
+			}
+		});
 	}
 	finishEdit(event: { username: string, forename: string, lastname: string }[]) {
 		this.isEdit = false;
@@ -236,7 +265,7 @@ export class AdminSverwComponent implements OnInit {
 		console.log("Sende event zum Server:");
 		console.log(event);
 		this.awaitServerResponse = true;
-		/*this.service.sendDataToServerApiWithData("editUser", { editUsers: event }).subscribe(
+		this.service.sendDataToServerApiWithData("editUser", { editUsers: event }).subscribe(
 			res => {
 				this.awaitServerResponse = false;
 			},
@@ -244,7 +273,7 @@ export class AdminSverwComponent implements OnInit {
 				this.awaitServerResponse = false;
 				this.service.openSnackBar("Der Benutzer konnte nicht bearbeitet werden. Bitte wenden Sie sich an einen Administartor!", "OK");
 			}
-		);*/
+		);
 	}
 
 	finishAdding(event) {
@@ -255,15 +284,15 @@ export class AdminSverwComponent implements OnInit {
 		}
 		console.log("Sende event zum Server:");
 		console.log(event);
-		/*this.service.sendDataToServerApiWithData("addUser", { addedUsers: event }).subscribe(
-		res => {
-			this.awaitServerResponse = false;
-		},
+		this.service.sendDataToServerApiWithData("addUser", { addedUsers: event }).subscribe(
+			res => {
+				this.awaitServerResponse = false;
+			},
 			err => {
 				this.awaitServerResponse = false;
 				this.service.openSnackBar("Der Benutzer konnte nicht hinzugefügt werden. Bitte wenden Sie sich an einen Administartor!", "OK");
 			}
-		); */
+		);
 	}
 
 	finishAllowing(event) {
@@ -274,15 +303,15 @@ export class AdminSverwComponent implements OnInit {
 		}
 		console.log("Sende event zum Server:");
 		console.log(event);
-		/*this.service.sendDataToServerApiWithData("allowUsers", { allowedUsers: event }).subscribe(
-		res => {
-			this.awaitServerResponse = false;
-		},
+		this.service.sendDataToServerApiWithData("allowUsers", { allowedUsers: event }).subscribe(
+			res => {
+				this.awaitServerResponse = false;
+			},
 			err => {
 				this.awaitServerResponse = false;
 				this.service.openSnackBar("Der Zugang konnte dem Nutzer nicht erlaubt werden. Bitte wenden Sie sich an einen Administartor!", "OK");
 			}
-		);*/
+		);
 	}
 
 }

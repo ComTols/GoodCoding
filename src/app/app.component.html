@@ -23,7 +23,7 @@
 		<div class="app-header-bar">
 			<mat-toolbar color="primary" class="navbar navbar-top" (scroll)="onWindowScroll($event);">
 				<button mat-icon-button>
-					<mat-icon (click)="drawer.toggle()">menu</mat-icon>
+					<mat-icon *ngIf="!isWait" (click)="drawer.toggle()">menu</mat-icon>
 				</button>
 				<span style="float: left;">Good Coding</span>
 			</mat-toolbar>

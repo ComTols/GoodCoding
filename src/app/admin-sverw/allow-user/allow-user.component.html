@@ -21,7 +21,7 @@
 			<p>
 				<mat-form-field appearance="outline">
 					<mat-label>Klasse/Kurs</mat-label>
-					<mat-select name="class">
+					<mat-select name="class" (selectionChange)="course($event)">
 						<mat-option *ngFor="let course of courses" [value]="course">
 							{{course.class}}
 						</mat-option>

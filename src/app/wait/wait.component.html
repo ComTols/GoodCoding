@@ -1,3 +1,5 @@
+<mat-progress-bar mode="indeterminate" *ngIf="onWaitingForAccess"></mat-progress-bar>
 <h1>Auf Freischaltung warten</h1>
-<p>Du wurdest noch nicht von einer Lehrperson freigeschaltet. Bitte wende dich an deinen Informatiklehrer, um Zugang zu
-	erhalten. Dein Anmeldeversuch wird deinem Lehrer angezeigt.</p>
+<p>{{message}}</p>
+<button mat-raised-button *ngIf="!onWaitingForAccess" (click)="onClickLogin()">Log In<mat-icon>login</mat-icon></button>
+<mat-icon *ngIf="isError">warning</mat-icon>

@@ -12,7 +12,7 @@
 	Dokument über
 	den Speichern-Button abspeichern. Dadurch wird die Kopie gelöscht und alle Änderungen übertragen.
 </p>
-<table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
+<table *ngFor="let item of refresh" mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
 
 	<ng-container matColumnDef="type">
 		<th mat-header-cell *matHeaderCellDef></th>
@@ -23,7 +23,11 @@
 
 	<ng-container matColumnDef="name">
 		<th mat-header-cell *matHeaderCellDef>Dateiname</th>
-		<td mat-cell *matCellDef="let row">{{row.name}}</td>
+		<td mat-cell *matCellDef="let row">
+			<a *ngIf="row.type == 'folder'" (click)="onClickFolder(row.name)">{{row.name}}</a>
+			<a *ngIf="row.type == 'arrow_back'" (click)="onClickBack()">{{row.name}}</a>
+			<span *ngIf="row.type == 'description'">{{row.name}}</span>
+		</td>
 	</ng-container>
 
 	<ng-container matColumnDef="size">
@@ -33,7 +37,7 @@
 
 	<ng-container matColumnDef="lastChange">
 		<th mat-header-cell *matHeaderCellDef>Letzte Änderung</th>
-		<td mat-cell *matCellDef="let row">{{row.lastChange}}</td>
+		<td mat-cell *matCellDef="let row">{{row.lastModified}}</td>
 	</ng-container>
 
 	<ng-container matColumnDef="action">
@@ -71,5 +75,6 @@
 	<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 	<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+<mat-spinner *ngIf="awaitingServerResponse"></mat-spinner>
 <p>{{ergebnisError}}</p>
 <p>{{ergebnisCorrect}}</p>

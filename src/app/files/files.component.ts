@@ -6,6 +6,15 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ClientService } from '../client.service';
 
+
+interface dirStructur {
+	name: string,
+	type: string,
+	size?: number,
+	lastModified?: string,
+	content?: dirStructur[]
+}
+
 @Component({
 	selector: 'app-files',
 	templateUrl: './files.component.html',
@@ -13,9 +22,13 @@ import { ClientService } from '../client.service';
 })
 export class FilesComponent implements OnInit {
 
-	dataSource: { type, name, size, lastChange }[] = [{ type: 'description', name: 'test', size: '5mb', lastChange: 'heute' }, { type: 'description', name: 'test2', size: '15mb', lastChange: 'morgen' }];
+	dataSource: dirStructur[] = [];
 	displayedColumns: string[] = ['type', 'name', 'size', 'lastChange', 'action'];
+	fullFileTree: dirStructur[] = [];
+	path: string[] = ["/"];
+	awaitingServerResponse: boolean = true;
 
+	refresh: string[] = ["refresh"];
 	ergebnisError: string;
 	ergebnisCorrect: string;
 
@@ -57,8 +70,13 @@ export class FilesComponent implements OnInit {
 
 		setInterval(() => {
 			this.service.sendDataToServerApiWithData('getDir', { path: '/home/marianum/public_html' }).subscribe(
-				res => {
-					console.log(res);
+				(res: { acces: string, dirTree: dirStructur[] }) => {
+					this.awaitingServerResponse = false;
+					this.fullFileTree = res.dirTree;
+
+					this.refreschTable();
+
+					console.log(this.dataSource);
 					this.ergebnisCorrect = JSON.stringify(res);
 				},
 				err => {
@@ -67,7 +85,7 @@ export class FilesComponent implements OnInit {
 
 				}
 			)
-		}, 1000);
+		}, 5000);
 	}
 
 	public onClickDel(target) {
@@ -103,5 +121,45 @@ export class FilesComponent implements OnInit {
 	public onClickDetails(target) {
 		console.log(target);
 
+	}
+
+	refreschTable() {
+		var dirContent: dirStructur[];
+		this.path.forEach(e => {
+			if (e == "/") {
+				dirContent = this.fullFileTree;
+			} else {
+				for (var i: number = 0; i < dirContent.length; i++) {
+					if (e == dirContent[i].name) {
+						dirContent = dirContent[i].content;
+					}
+				}
+			}
+		});
+		for (var j: number = 0; j < dirContent.length; j++) {
+			if (dirContent[j].type == "file") {
+				dirContent[j].type = "description";
+			} else if (dirContent[j].type == "dir") {
+				dirContent[j].type = "folder";
+			}
+		}
+		if (this.path.length > 1) {
+			dirContent.unshift({
+				name: "Zurück ...",
+				type: "arrow_back"
+			});
+		}
+		this.dataSource = dirContent;
+		this.refresh = [Math.random().toString()];
+	}
+
+	onClickFolder(name: string) {
+		this.path.push(name);
+		this.refreschTable();
+	}
+
+	onClickBack() {
+		this.path.pop();
+		this.refreschTable();
 	}
 }
