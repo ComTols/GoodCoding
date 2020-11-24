@@ -1,0 +1,17 @@
+<div class="flex">
+	<div class="flexItem">
+		<button mat-icon-button>
+			<mat-icon>close</mat-icon>
+		</button>
+		<button mat-icon-button>
+			<mat-icon>save</mat-icon>
+		</button>
+		<mat-form-field appearance="outline">
+			<mat-label>Sprache</mat-label>
+			<mat-select>
+				<mat-option *ngFor="let option of languages" [value]="option.value">{{option.text}}</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</div>
+	<ace [config]="config" [mode]="mode" [theme]="theme" [(value)]="value" (valueChange)="onChange($event)"></ace>
+</div>

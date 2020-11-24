@@ -1,5 +1,5 @@
-<particles [params]="myParams" [style]="myStyle" [width]="width" [height]="height"></particles>
-<mat-sidenav-container id="particles-js" *ngIf="!isLogin">
+<particles [params]="myParams" [style]="myStyle" [width]="width" [height]="height" *ngIf="!isEditor"></particles>
+<mat-sidenav-container id="particles-js" *ngIf="!isLogin && !isEditor">
 	<mat-sidenav #drawer class='fix-nav'>
 		<mat-nav-list>
 			<a mat-list-item (click)="drawer.toggle()">
@@ -30,5 +30,5 @@
 		</div>
 	</mat-sidenav-content>
 </mat-sidenav-container>
-<router-outlet *ngIf="isLogin"></router-outlet>
-<app-footer-bar *ngIf="!isLogin"></app-footer-bar>
+<router-outlet *ngIf="isLogin || isEditor"></router-outlet>
+<app-footer-bar *ngIf="!isLogin && !isEditor"></app-footer-bar>

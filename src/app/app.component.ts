@@ -11,6 +11,7 @@ import { HostListener } from '@angular/core';
 export class AppComponent {
 
 	isLogin: boolean = true;
+	isEditor: boolean = false;
 	isAdmin = false;
 	isWait = false;
 	site: { url: string, name: string, admin: boolean };
@@ -58,6 +59,10 @@ export class AppComponent {
 		}, {
 			url: 'privacy',
 			name: 'Datenschutz',
+			admin: false
+		}, {
+			url: 'editor',
+			name: 'Editor',
 			admin: false
 		}
 	];
@@ -113,6 +118,16 @@ export class AppComponent {
 					name: 'Warten auf Freischaltung',
 					admin: false
 				};
+			} else if (url.url == "/editor") {
+				this.isLogin = false;
+				this.isAdmin = false;
+				this.isWait = false;
+				this.isEditor = true;
+				this.site = {
+					url: "editor",
+					name: "Editor",
+					admin: false
+				}
 			} else if (url.url != "/") {
 				this.isLogin = false;
 				this.isAdmin = false;
@@ -134,6 +149,7 @@ export class AppComponent {
 
 	@HostListener('window:scroll', ['$event'])
 	onWindowScroll(e) {
+		if (this.isEditor == true) return;
 		if (this.isLogin == true) return;
 		let element = document.querySelector('.navbar');
 		if (window.pageYOffset > element.clientHeight) {

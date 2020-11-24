@@ -26,6 +26,14 @@ import { AllowUserComponent } from './admin-sverw/allow-user/allow-user.componen
 import { DeleteDialogComponent } from './admin-sverw/dialogs/delete-dialog/delete-dialog.component';
 import { LockDialogComponent } from './admin-sverw/dialogs/lock-dialog/lock-dialog.component';
 import { PermittAdminDialogComponent } from './admin-sverw/dialogs/permitt-admin-dialog/permitt-admin-dialog.component';
+import { EditorComponent } from './files/editor/editor.component';
+import { AceEditorModule } from 'ng2-ace-editor';
+import { AceModule } from 'ngx-ace-wrapper';
+import { ACE_CONFIG } from 'ngx-ace-wrapper';
+import { AceConfigInterface } from 'ngx-ace-wrapper';
+
+const DEFAULT_ACE_CONFIG: AceConfigInterface = {
+};
 
 @NgModule({
 	declarations: [
@@ -44,7 +52,8 @@ import { PermittAdminDialogComponent } from './admin-sverw/dialogs/permitt-admin
 		AllowUserComponent,
 		DeleteDialogComponent,
 		LockDialogComponent,
-		PermittAdminDialogComponent
+		PermittAdminDialogComponent,
+		EditorComponent
 	],
 	entryComponents: [RenameDialogComponent, DelDialogComponent, MoveDialogComponent, AddClassDialogComponent, DeleteDialogComponent, LockDialogComponent, PermittAdminDialogComponent],
 	imports: [
@@ -55,9 +64,13 @@ import { PermittAdminDialogComponent } from './admin-sverw/dialogs/permitt-admin
 		MaterialModule,
 		ReactiveFormsModule,
 		ChartsModule,
-		ParticlesModule
+		ParticlesModule,
+		AceModule
 	],
-	providers: [ClientService, CookieService],
+	providers: [ClientService, CookieService, {
+		provide: ACE_CONFIG,
+		useValue: DEFAULT_ACE_CONFIG
+	}],
 	bootstrap: [AppComponent]
 })
 export class AppModule { }
