@@ -11,8 +11,47 @@
 .flexItem {
 	height: 4em;
 	background-color: dimgrey;
+	box-shadow: black;
 }
 
 ace {
 	min-height: 500px;
+}
+
+.flexwrap {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: row;
+}
+
+.fileExplorer {
+	min-width: max-content;
+	background-color: gray;
+	height: 100%;
+	padding-right: 2em;
+	resize: horizontal;
+}
+
+.example-tree-invisible {
+    display: none;
+}
+
+.example-tree ul,
+.example-tree li {
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+    min-width: max-content;
+}
+
+mat-tree {
+	background: none;
+}
+
+a {
+	cursor: pointer;
+}
+
+.mat-tree-node {
+	border-left: 1px solid black;
 }

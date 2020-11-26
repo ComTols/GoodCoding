@@ -21,6 +21,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTreeModule } from '@angular/material/tree';
 
 const material = [
 	MatFormFieldModule,
@@ -44,7 +46,9 @@ const material = [
 	MatSelectModule,
 	MatAutocompleteModule,
 	MatProgressBarModule,
-	MatChipsModule
+	MatChipsModule,
+	MatSlideToggleModule,
+	MatTreeModule
 ];
 
 @NgModule({

@@ -114,7 +114,8 @@ export class FilesComponent implements OnInit {
 		let dialogRef = this.dialog.open(MoveDialogComponent);
 		dialogRef.afterClosed().subscribe(result => {
 			if (result != false) {
-				//TODO: löschen
+				console.log(result);
+				//TODO: Verschieben
 			}
 		});
 	}
