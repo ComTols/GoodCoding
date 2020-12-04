@@ -15,55 +15,72 @@ export class AppComponent {
 	isAdmin = false;
 	isWait = false;
 	site: { url: string, name: string, admin: boolean };
-	navItems: { url: string, name: string, admin: boolean }[] = [
-		/*{
+	navItems: { url: string, name: string, admin: boolean, showInNavBar: boolean }[] = [
+		{
 			url: 'wait',
 			name: 'Warten auf Freischaltung',
-			admin: false
-		}, */{
+			admin: false,
+			showInNavBar: false
+		}, {
 			url: 'dashboard',
 			name: 'Dashboard',
-			admin: false
+			admin: false,
+			showInNavBar: true
 		}, {
 			url: 'files',
 			name: 'Dateien',
-			admin: false
+			admin: false,
+			showInNavBar: true
 		}, {
 			url: 'phpmyadmin',
 			name: 'Datenbank',
-			admin: false
+			admin: false,
+			showInNavBar: true
 		}, {
 			url: 'all',
 			name: 'Weitere Seiten',
-			admin: false
+			admin: false,
+			showInNavBar: true
 		}, {
 			url: 'logout',
 			name: 'Log Out',
-			admin: false
+			admin: false,
+			showInNavBar: true
 		}, {
 			url: 'admin/dashboard',
 			name: 'Dashboard',
-			admin: true
+			admin: true,
+			showInNavBar: true
 		}, {
 			url: 'admin/sverw',
 			name: 'Schülerverwaltung',
-			admin: true
+			admin: true,
+			showInNavBar: true
 		}, {
 			url: 'admin/workload',
 			name: 'Auslastung',
-			admin: true
+			admin: true,
+			showInNavBar: true
 		}, {
 			url: 'admin/all',
 			name: 'Alle Seiten',
-			admin: true
+			admin: true,
+			showInNavBar: true
 		}, {
 			url: 'privacy',
 			name: 'Datenschutz',
-			admin: false
+			admin: false,
+			showInNavBar: false
 		}, {
 			url: 'editor',
 			name: 'Editor',
-			admin: false
+			admin: false,
+			showInNavBar: false
+		}, {
+			url: "imprint",
+			name: "Impressum",
+			admin: false,
+			showInNavBar: false
 		}
 	];
 	myStyle: object = {

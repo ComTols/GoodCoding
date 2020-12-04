@@ -1,0 +1,8 @@
+<div *ngFor="let file of source">
+	<details *ngIf="file.type == 'dir'">
+		<summary>{{file.filename}}</summary>
+		<app-filetree (cklickFile)="onClickFileChildInstance($event)" [source]="file.children"></app-filetree>
+	</details>
+	<mat-icon *ngIf="file.type != 'dir'">{{file.type}}</mat-icon>
+	<a (click)="onClickFile(file.path, file.filename)" *ngIf="file.type != 'dir'">{{file.filename}}</a>
+</div>

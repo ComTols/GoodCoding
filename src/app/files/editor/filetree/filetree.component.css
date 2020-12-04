@@ -1,0 +1,20 @@
+details {
+	margin: 0 0 0.5em 1em;
+	text-decoration: none;
+	color: blanchedalmond;
+	cursor: pointer;
+}
+
+a {
+	margin: 0 0 0 0;
+	text-decoration: none;
+	color: blanchedalmond;
+	cursor: pointer;
+}
+
+mat-icon {
+	font-size: 1em;
+	height: min-content;
+	width: min-content;
+	margin-left: 0.8em;
+}

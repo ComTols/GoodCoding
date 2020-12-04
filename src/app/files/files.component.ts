@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ClientService } from '../client.service';
 
 
-interface dirStructur {
+export interface dirStructur {
 	name: string,
 	type: string,
 	size?: number,
@@ -37,9 +37,15 @@ export class FilesComponent implements OnInit {
 		public dialog: MatDialog,
 		public router: Router
 	) {
-		service.sendDataToServerApi('getFiles').subscribe(
-			res => {
-				//TODO: dataSource auffüllen
+		this.service.sendDataToServerApiWithData('getDir', { path: '/home/marianum/public_html' }).subscribe(
+			(res: { acces: string, dirTree: dirStructur[] }) => {
+				this.awaitingServerResponse = false;
+				this.fullFileTree = res.dirTree;
+
+				this.refreschTable();
+
+				console.log(this.dataSource);
+				this.ergebnisCorrect = JSON.stringify(res);
 			},
 			err => {
 				console.log(err);
@@ -84,7 +90,7 @@ export class FilesComponent implements OnInit {
 					this.ergebnisError = err.error.text + " -> FEHLER";
 
 				}
-			)
+			);
 		}, 5000);
 	}
 

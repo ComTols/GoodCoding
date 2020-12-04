@@ -13,9 +13,11 @@ import { BehaviorSubject } from 'rxjs';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { Injectable } from '@angular/core';
 import { Observable, of as observableOf } from 'rxjs';
+import { dirStructur } from '../files.component';
+import { ClientService } from 'src/app/client.service';
 
 export class FileNode {
-	children: FileNode[];
+	children?: FileNode[];
 	filename: string;
 	type: string;
 	path: string;
@@ -54,61 +56,69 @@ export class EditorComponent implements OnInit {
 		text: "PHP"
 	}];
 
-	dataSource: MatTreeNestedDataSource<FileNode>;
-	dataChange: BehaviorSubject<FileNode[]> = new BehaviorSubject<FileNode[]>([]);
-	treeControl: NestedTreeControl<FileNode>;
+	source: FileNode[] = [];
+	awaitingServerResponse: boolean = true;
 
-	constructor() {
-		this.treeControl = new NestedTreeControl<FileNode>(this._getChildren);
-		this.dataSource = new MatTreeNestedDataSource();
+	ergebnisCorrect: string;
+	ergebnisError: string;
 
-		this.dataChange.subscribe(data => this.dataSource.data = data);
-
-		this.dataChange.next([
-			{
-				filename: "folder",
-				type: "dir",
-				path: "root",
-				children: [
-					{
-						filename: "test3",
-						type: "dir",
-						path: "root/folder",
-						children: [
-							{
-								filename: "child",
-								type: "exe",
-								path: "root/folder/test3",
-								children: []
-							}
-						],
-					}
-				],
-			},
-			{
-				filename: "test2",
-				type: "exe",
-				path: "root",
-				children: [],
-			},
-		]);
+	constructor(public service: ClientService) {
 	}
 
-	private _getChildren = (node: FileNode) => { return observableOf(node.children); };
-
-	hasNestedChild = (_: number, nodeData: FileNode) => {
-		if (nodeData.type == "dir") {
-			return true;
-		} else {
-			return false;
-		}
-	};
-
 	ngOnInit(): void {
+		this.service.sendDataToServerApiWithData('getDir', { path: '/home/marianum/public_html' }).subscribe(
+			(res: { acces: string, dirTree: dirStructur[] }) => {
+				this.awaitingServerResponse = false;
+				res.dirTree.forEach(e => {
+					this.source.push(this.changeDirStructureToFileNode(e, "root"));
+				});
+				this.source.sort(function (a, b): number {
+					if (a.type == b.type) {
+						return 0;
+					}
+					var aNum, bNum: number;
+					switch (a.type) {
+						case 'file':
+							aNum = 1;
+							break;
+						case 'dir':
+							aNum = 2;
+							break;
+						default:
+							aNum = 3;
+					}
+					switch (b.type) {
+						case 'file':
+							bNum = 1;
+							break;
+						case 'dir':
+							bNum = 2;
+							break;
+						default:
+							bNum = 3;
+					}
+					if (aNum < bNum) {
+						return -1;
+					}
+					if (aNum > bNum) {
+						return 1;
+					}
+
+				});
+
+				console.log(this.source);
+				this.ergebnisCorrect = JSON.stringify(res);
+			},
+			err => {
+				console.log(err);
+				this.ergebnisError = err.error.text + " -> FEHLER";
+
+			}
+		);
 	}
 
 	onChange(event) {
-
+		//Ace Change
 	}
 
 	onChangeLanguage(event) {
@@ -117,15 +127,69 @@ export class EditorComponent implements OnInit {
 
 	onChangeDarkMode(event) {
 		if (event.checked) {
-			this.mode = "twilight";
+			this.theme = "twilight";
 		} else if (!event.checked) {
-			this.mode = "github";
+			this.theme = "github";
 		}
 
 	}
 
-	onClickFile(node: FileNode) {
-		console.log(node.path + "/" + node.filename + "." + node.type);
+	onClickFile(path: string) {
+		//TODO: Datei öffnen
 
+	}
+
+	private changeDirStructureToFileNode(d: dirStructur, path: string): FileNode {
+		var f: FileNode = new FileNode();
+		var children: FileNode[] = [];
+		if (d.content?.length > 0) {
+			d.content.forEach(e => {
+				children.push(this.changeDirStructureToFileNode(e, path + "/" + d.name));
+			});
+		}
+		children.sort(function (a, b): number {
+			if (a.type == b.type) {
+				return 0;
+			}
+			var aNum, bNum: number;
+			switch (a.type) {
+				case 'file':
+					aNum = 1;
+					break;
+				case 'dir':
+					aNum = 2;
+					break;
+				default:
+					aNum = 3;
+			}
+			switch (b.type) {
+				case 'file':
+					bNum = 1;
+					break;
+				case 'dir':
+					bNum = 2;
+					break;
+				default:
+					bNum = 3;
+			}
+			if (aNum < bNum) {
+				return -1;
+			}
+			if (aNum > bNum) {
+				return 1;
+			}
+
+		});
+		if (d.type == "file") {
+			d.type = "description";
+		}
+		f = {
+			filename: d.name,
+			type: d.type,
+			children: children,
+			path: path
+		}
+
+		return f;
 	}
 }

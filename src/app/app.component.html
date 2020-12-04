@@ -7,7 +7,7 @@
 			</a>
 			<div *ngFor="let item of navItems">
 				<a mat-list-item href="{{item.url}}"
-					*ngIf="site.name!=item.name && item.admin==site.admin">{{item.name}}</a>
+					*ngIf="site.name!=item.name && item.admin==site.admin && item.showInNavBar">{{item.name}}</a>
 			</div>
 
 		</mat-nav-list>
