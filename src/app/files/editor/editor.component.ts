@@ -1,3 +1,4 @@
+import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import 'brace';
 import 'brace/ext/language_tools'
@@ -5,6 +6,7 @@ import 'brace/mode/text';
 import 'brace/mode/html';
 import 'brace/mode/css';
 import 'brace/mode/javascript';
+import 'brace/mode/typescript';
 import 'brace/mode/php';
 import 'brace/theme/twilight';
 import 'brace/theme/github';
@@ -54,19 +56,24 @@ export class EditorComponent implements OnInit {
 	}, {
 		value: "php",
 		text: "PHP"
+	}, {
+		value: "typescript",
+		text: "TypeScript"
 	}];
 
 	source: FileNode[] = [];
 	awaitingServerResponse: boolean = true;
 
+	aktPath: string;
+
 	ergebnisCorrect: string;
 	ergebnisError: string;
 
-	constructor(public service: ClientService) {
+	constructor(public service: ClientService, private router: Router, private route: ActivatedRoute) {
 	}
 
 	ngOnInit(): void {
-		this.service.sendDataToServerApiWithData('getDir', { path: '/home/marianum/public_html' }).subscribe(
+		this.service.sendDataToServerApiWithData('getDir', { path: '/home/' + localStorage.getItem("username") + '/public_html' }).subscribe(
 			(res: { acces: string, dirTree: dirStructur[] }) => {
 				this.awaitingServerResponse = false;
 				res.dirTree.forEach(e => {
@@ -76,7 +83,7 @@ export class EditorComponent implements OnInit {
 					if (a.type == b.type) {
 						return 0;
 					}
-					var aNum, bNum: number;
+					var aNum: number, bNum: number;
 					switch (a.type) {
 						case 'file':
 							aNum = 1;
@@ -115,17 +122,20 @@ export class EditorComponent implements OnInit {
 
 			}
 		);
+		var path: string = this.route.snapshot.params['path'];
+		path = decodeURIComponent(path);
+		this.getFile(path);
 	}
 
-	onChange(event) {
+	onChange(event: any) {
 		//Ace Change
 	}
 
-	onChangeLanguage(event) {
+	onChangeLanguage(event: { value: string; }) {
 		this.mode = event.value;
 	}
 
-	onChangeDarkMode(event) {
+	onChangeDarkMode(event: { checked: any; }) {
 		if (event.checked) {
 			this.theme = "twilight";
 		} else if (!event.checked) {
@@ -136,7 +146,10 @@ export class EditorComponent implements OnInit {
 
 	onClickFile(path: string) {
 		//TODO: Datei öffnen
+		path = path.replace("root/", "");
+		console.log(path);
 
+		this.getFile(path);
 	}
 
 	private changeDirStructureToFileNode(d: dirStructur, path: string): FileNode {
@@ -151,7 +164,7 @@ export class EditorComponent implements OnInit {
 			if (a.type == b.type) {
 				return 0;
 			}
-			var aNum, bNum: number;
+			var aNum: number, bNum: number;
 			switch (a.type) {
 				case 'file':
 					aNum = 1;
@@ -191,5 +204,37 @@ export class EditorComponent implements OnInit {
 		}
 
 		return f;
+	}
+
+	onClickClose() {
+		console.log("Close");
+		this.router.navigate(["/files"]);
+	}
+
+	onClickSave() {
+		this.service.sendDataToServerApiWithData("saveFile", { path: "/home/" + localStorage.getItem("username") + "/public_html/" + this.aktPath, fileContent: this.value }).subscribe(
+			(res) => {
+				console.log(res);
+
+			},
+			err => {
+				console.error(err);
+			}
+		);
+	}
+
+	private getFile(path: string) {
+		if (this.aktPath != path) {
+			this.service.sendDataToServerApiWithData("getFile", { path: "/home/" + localStorage.getItem("username") + "/public_html/" + path }).subscribe(
+				(res: { acces: string, fileContent: string }) => {
+					console.log(res);
+					this.value = res.fileContent;
+					this.aktPath = path;
+				},
+				err => {
+					console.error(err);
+				}
+			);
+		}
 	}
 }

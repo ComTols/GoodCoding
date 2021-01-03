@@ -32,23 +32,25 @@ export class LoginComponent implements OnInit {
 		private service: ClientService,
 	) {
 		for (let i = 5; i <= 13; i++) {
-			for (let index = 0; index < 5; index++) {
+			for (let index = 0; index < 6; index++) {
 				switch (index) {
 					case 0:
-						this.options.push(i + "a")
+						this.options.push(i + "a");
 						break;
 					case 1:
-						this.options.push(i + "b")
+						this.options.push(i + "b");
 						break;
 					case 2:
-						this.options.push(i + "c")
+						this.options.push(i + "c");
 						break;
 					case 3:
-						this.options.push(i + "d")
+						this.options.push(i + "d");
 						break;
 					case 4:
-						this.options.push(i + "e")
+						this.options.push(i + "e");
 						break;
+					case 5:
+						this.options.push(i + "ext");
 				}
 			}
 		}

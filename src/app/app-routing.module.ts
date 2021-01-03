@@ -1,3 +1,4 @@
+import { LogoutComponent } from './logout/logout.component';
 import { EditorComponent } from './files/editor/editor.component';
 import { WaitComponent } from './wait/wait.component';
 import { NgModule } from '@angular/core';
@@ -54,8 +55,11 @@ const routes: Routes = [{
 	path: 'wait',
 	component: WaitComponent
 }, {
-	path: 'editor',
+	path: 'editor/:path',
 	component: EditorComponent
+}, {
+	path: 'logout',
+	component: LogoutComponent
 }];
 
 @NgModule({
@@ -75,5 +79,7 @@ export const routingComponents = [
 	ContactComponent,
 	AdminDashboardComponent,
 	AdminSverwComponent,
-	AllComponent
+	AllComponent,
+	EditorComponent,
+	LogoutComponent
 ];

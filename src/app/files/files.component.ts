@@ -37,7 +37,7 @@ export class FilesComponent implements OnInit {
 		public dialog: MatDialog,
 		public router: Router
 	) {
-		this.service.sendDataToServerApiWithData('getDir', { path: '/home/marianum/public_html' }).subscribe(
+		this.service.sendDataToServerApiWithData('getDir', { path: '/home/' + localStorage.getItem("username") + '/public_html' }).subscribe(
 			(res: { acces: string, dirTree: dirStructur[] }) => {
 				this.awaitingServerResponse = false;
 				this.fullFileTree = res.dirTree;
@@ -75,7 +75,7 @@ export class FilesComponent implements OnInit {
 		);
 
 		setInterval(() => {
-			this.service.sendDataToServerApiWithData('getDir', { path: '/home/marianum/public_html' }).subscribe(
+			this.service.sendDataToServerApiWithData('getDir', { path: '/home/' + localStorage.getItem("username") + '/public_html' }).subscribe(
 				(res: { acces: string, dirTree: dirStructur[] }) => {
 					this.awaitingServerResponse = false;
 					this.fullFileTree = res.dirTree;
@@ -168,5 +168,21 @@ export class FilesComponent implements OnInit {
 	onClickBack() {
 		this.path.pop();
 		this.refreschTable();
+	}
+
+	onClickFile(name: string) {
+		var stringpath: string = "";
+		var first: boolean = true;
+		this.path.forEach(e => {
+			if (first) {
+				stringpath += ""
+			} else {
+				stringpath += e + "/";
+			}
+			first = false;
+		})
+		stringpath += name;
+		stringpath = encodeURIComponent(stringpath);
+		this.router.navigate(["/editor/" + stringpath]);
 	}
 }

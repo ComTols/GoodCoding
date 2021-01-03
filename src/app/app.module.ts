@@ -32,6 +32,7 @@ import { AceModule } from 'ngx-ace-wrapper';
 import { ACE_CONFIG } from 'ngx-ace-wrapper';
 import { AceConfigInterface } from 'ngx-ace-wrapper';
 import { FiletreeComponent } from './files/editor/filetree/filetree.component';
+import { LogoutComponent } from './logout/logout.component';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
 };
@@ -55,7 +56,8 @@ const DEFAULT_ACE_CONFIG: AceConfigInterface = {
 		LockDialogComponent,
 		PermittAdminDialogComponent,
 		EditorComponent,
-		FiletreeComponent
+		FiletreeComponent,
+		LogoutComponent
 	],
 	entryComponents: [RenameDialogComponent, DelDialogComponent, MoveDialogComponent, AddClassDialogComponent, DeleteDialogComponent, LockDialogComponent, PermittAdminDialogComponent],
 	imports: [

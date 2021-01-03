@@ -135,7 +135,12 @@ export class AppComponent {
 					name: 'Warten auf Freischaltung',
 					admin: false
 				};
-			} else if (url.url == "/editor") {
+			} else if (url.url == "/logout") {
+				this.isLogin = false;
+				this.isAdmin = false;
+				this.isWait = true;
+				this.site = this.navItems[5];
+			} else if (url.url.includes("/editor")) {
 				this.isLogin = false;
 				this.isAdmin = false;
 				this.isWait = false;

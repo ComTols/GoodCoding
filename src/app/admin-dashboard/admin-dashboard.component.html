@@ -22,31 +22,37 @@
 			<canvas baseChart [datasets]="memoryChartData" [labels]="memoryChartLabels"
 				[options]="memoryChartOptions" [legend]="memoryChartLegend" [chartType]="memoryChartType"></canvas>
 			<p>
-				<b>2/3 Datenbnaken aktiv</b>
+				<b>{{totalMemory}} MB Gesamt</b>
 			</p>
+			<mat-progress-bar color="primary" mode="buffer" [value]="memoryProgress" [bufferValue]="memoryBuffer">
+			</mat-progress-bar><span>{{memoryProgress}}%</span>
 		</mat-card-content>
 	</mat-card>
 	<mat-card class="item">
-		<mat-card-title>Webseite</mat-card-title>
-
+		<mat-card-title>CPU</mat-card-title>
 		<mat-card-content>
-			<p style="margin: 0;">
-				<mat-icon style="font-size: 17em; width: max-content; height: max-content;">
-					language</mat-icon>
-			</p>
+			<canvas baseChart [datasets]="cpuChartData" [labels]="cpuChartLabels" [options]="cpuChartOptions"
+				[legend]="cpuChartLegend" [chartType]="cpuChartType"></canvas>
 		</mat-card-content>
-		<mat-card-actions>
-			<button mat-button>Webseite Besuchen</button>
-		</mat-card-actions>
+		<p>
+			<b matTooltip="Mittelwert der Rechenoperationen in der letzten Minute">{{cpu}}% Auslastung</b>
+		</p>
 	</mat-card>
-	<mat-card class="item" matBadge="5">
+	<mat-card class="item">
 		<mat-card-title>
-			Post
+			<mat-icon matBadge="5">email</mat-icon><span style="margin-left: 1em;">Post</span>
 		</mat-card-title>
 		<mat-card-content>
-			<p>
-				<mat-icon matBadge="5">email</mat-icon>
-			</p>
+			<mat-list>
+				<ng-container *ngFor="let item of messages">
+					<mat-list-item>
+						<mat-icon mat-list-icon>{{item.isNew ? "markunread" : "drafts"}}</mat-icon>
+						<h2 style="font-weight: bold;" mat-line>{{item.head}}</h2>
+						<span mat-line>Von: {{item.from.forename}} {{item.from.lastname}}</span>
+					</mat-list-item>
+					<mat-divider></mat-divider>
+				</ng-container>
+			</mat-list>
 		</mat-card-content>
 	</mat-card>
 	<mat-card class="item">
@@ -65,7 +71,7 @@
 					<mat-icon mat-list-icon>history</mat-icon>
 					<h2 mat-line>Domain</h2>
 					<a mat-line
-						href="http://www.info.marianumlan.de/~marianum">www.info.marianumlan.de/~marianum</a>
+						href="http://www.info.marianumlan.de/~{{username}}">www.info.marianumlan.de/~{{username}}</a>
 				</mat-list-item>
 				<mat-divider></mat-divider>
 				<mat-list-item>

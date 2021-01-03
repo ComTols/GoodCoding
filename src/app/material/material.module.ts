@@ -23,6 +23,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTreeModule } from '@angular/material/tree';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const material = [
 	MatFormFieldModule,
@@ -48,7 +49,8 @@ const material = [
 	MatProgressBarModule,
 	MatChipsModule,
 	MatSlideToggleModule,
-	MatTreeModule
+	MatTreeModule,
+	MatTooltipModule
 ];
 
 @NgModule({
