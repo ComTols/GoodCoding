@@ -24,14 +24,55 @@
 		</mat-card-actions>
 	</mat-card>
 	<mat-card class="item">
-		<mat-card-title>Datenbank</mat-card-title>
+		<mat-card-title>FTP-Zugangsdaten</mat-card-title>
 		<mat-card-content>
-			<canvas baseChart [datasets]="databaseChartData" [labels]="databaseChartLabels"
-				[options]="databaseChartOptions" [legend]="databaseChartLegend"
-				[chartType]="databaseChartType"></canvas>
-			<p>
-				<b>2/3 Datenbnaken aktiv</b>
-			</p>
+			<mat-list>
+				<mat-list-item>
+					<mat-icon mat-list-icon>dns</mat-icon>
+					<h2 mat-line>Übertragunsprotokoll</h2>
+					<span mat-line>FTP</span>
+				</mat-list-item>
+				<mat-divider></mat-divider>
+				<mat-list-item>
+					<mat-icon mat-list-icon>https</mat-icon>
+					<h2 mat-line>Verschlüsselung</h2>
+					<span mat-line>TLS/SSL Explizite Verschlüsselung</span>
+				</mat-list-item>
+				<mat-divider></mat-divider>
+				<mat-grid-list cols="2" rowHeight="72px">
+					<mat-grid-tile>
+						<mat-list-item>
+							<mat-icon mat-list-icon>language</mat-icon>
+							<h2 mat-line>Serveradresse</h2>
+							<span mat-line>marianumlan.de</span>
+						</mat-list-item>
+					</mat-grid-tile>
+					<mat-grid-tile>
+						<mat-list-item>
+							<mat-icon mat-list-icon>account_balance_wallet</mat-icon>
+							<h2 mat-line>Port</h2>
+							<span mat-line>6421</span>
+						</mat-list-item>
+					</mat-grid-tile>
+				</mat-grid-list>
+				<mat-divider></mat-divider>
+				<mat-grid-list cols="2" rowHeight="72px">
+					<mat-grid-tile>
+						<mat-list-item>
+							<mat-icon mat-list-icon>perm_identity</mat-icon>
+							<h2 mat-line>Benutzername</h2>
+							<span mat-line>{{username}}</span>
+						</mat-list-item>
+					</mat-grid-tile>
+					<mat-grid-tile>
+						<mat-list-item>
+							<mat-icon mat-list-icon>password</mat-icon>
+							<h2 mat-line>Passwort</h2>
+							<span mat-line>Wie bei Login</span>
+						</mat-list-item>
+					</mat-grid-tile>
+				</mat-grid-list>
+			</mat-list>
 		</mat-card-content>
 	</mat-card>
 	<mat-card class="item">
@@ -44,17 +85,25 @@
 			</p>
 		</mat-card-content>
 		<mat-card-actions>
-			<button mat-button>Webseite Besuchen</button>
+			<a href="https://goodcoding.marianum-fulda.de/~{{username}}/index.html"><button mat-button>Webseite
+					Besuchen</button></a>
 		</mat-card-actions>
 	</mat-card>
-	<mat-card class="item" matBadge="5">
+	<mat-card class="item">
 		<mat-card-title>
-			Post
+			<mat-icon matBadge="">email</mat-icon><span style="margin-left: 1em;">Post</span>
 		</mat-card-title>
 		<mat-card-content>
-			<p>
-				<mat-icon matBadge="5">email</mat-icon>
-			</p>
+			<mat-list>
+				<ng-container *ngFor="let item of messages">
+					<mat-list-item>
+						<mat-icon mat-list-icon>{{item.isNew ? "markunread" : "drafts"}}</mat-icon>
+						<h2 style="font-weight: bold;" mat-line>{{item.head}}</h2>
+						<span mat-line>Von: {{item.from.forename}} {{item.from.lastname}}</span>
+					</mat-list-item>
+					<mat-divider></mat-divider>
+				</ng-container>
+			</mat-list>
 		</mat-card-content>
 	</mat-card>
 	<mat-card class="item">
@@ -73,7 +122,7 @@
 					<mat-icon mat-list-icon>history</mat-icon>
 					<h2 mat-line>Domain</h2>
 					<a mat-line
-						href="http://www.info.marianumlan.de/~marianum">www.info.marianumlan.de/~marianum</a>
+						href="https://goodcoding.marianum-fulda.de/~{{username}}/index.html">goodcoding.marianum-fulda.de/~{{username}}</a>
 				</mat-list-item>
 				<mat-divider></mat-divider>
 				<mat-list-item>

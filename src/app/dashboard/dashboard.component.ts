@@ -1,3 +1,4 @@
+import { message } from './../admin-dashboard/admin-dashboard.component';
 import { Router } from '@angular/router';
 import { ClientService } from './../client.service';
 import { Component, OnInit } from '@angular/core';
@@ -18,26 +19,19 @@ export class DashboardComponent implements OnInit {
 	public storageChartLegend = false;
 	public storageChartData = [{ data: [80, 20] }];
 
-	public databaseChartOptions = {
-		scaleShowVerticalLines: false,
-		responsive: true,
-		scales: {
-			yAxes: [
-				{
-					display: false
-				}
-			],
-			xAxes: [
-				{
-					display: false
-				}
-			]
-		}
-	}
-	public databaseChartLabels = ['Datenbanken'];
-	public databaseChartType = 'bar';
-	public databaseChartLegend = false;
-	public databaseChartData = [{ data: [2], label: 'Aktiv', stack: 'a' }, { data: [1], label: 'Passiv', stack: 'a' }];
+	username: string = localStorage.getItem("username");
+
+	public messages: message[] = [{
+		from: {
+			username: "",
+			forename: "Sie haben noch keine Nachrichten erhalten.",
+			lastname: "",
+			class: ""
+		},
+		head: "Keine Nachrichten!",
+		body: "",
+		toClass: false
+	}];
 
 	constructor(
 		private router: Router,

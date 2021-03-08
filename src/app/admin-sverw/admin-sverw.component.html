@@ -1,10 +1,14 @@
 <mat-icon class="addPerson" *ngIf="!isEdit && !isNewUser" (click)="onClickNewUser()">add_circle</mat-icon>
 <h1>{{isEdit && !isNewUser ? "Stammdaten bearbeiten" : "Schülerverwaltung"}}</h1>
-<p>{{isEdit && !isNewUser ? "Sie haben einen Schüler ausgewählt. Überprüfen Sie die eingetragenenen Daten und verändern Sie diese." : "Die Schüler sind nach Klassen geordnet. Sobald sich ein Schüler zum ersten Mal im Portal angemeldet hat, erscheint
+<p>{{isEdit && !isNewUser ? "Sie haben einen Schüler ausgewählt. Überprüfen Sie die eingetragenenen Daten und verändern
+	Sie diese. HINWEIS: Diese Funktion steht noch nicht zur Verfügung! Bitte wenden Sie sich an einen Administrator." :
+	"Die Schüler sind nach Klassen geordnet. Sobald sich ein Schüler zum ersten Mal im Portal angemeldet
+	hat, erscheint
 	dieser in der Liste als 'Nicht freigegeben'. Sie können diesen Schülern entweder einzeln oder allen auf einmal den
 	Zugang gewähren. Jedem neuen Schüler muss eine Klasse bzw. ein Kurs zugeordnet werden. Alternativ können Sie
 	Schüler
-	manuell hinzufügen. Dazu klicken Sie bitte auf das Plus auf der rechten Seite."}}</p>
+	manuell hinzufügen. Dazu klicken Sie bitte auf das Plus auf der rechten Seite. HINWEIS: Bitte nach dem Freigeben
+	die Seite zur Sicherheit neu laden!"}}</p>
 <mat-accordion *ngIf="!isEdit && !isNewUser && !isAllowAccess">
 	<mat-expansion-panel *ngFor="let item of refresh">
 		<mat-expansion-panel-header>

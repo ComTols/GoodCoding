@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ChartsModule } from 'ng2-charts';
+import { AngularFileUploaderModule } from "angular-file-uploader";
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
@@ -69,7 +70,8 @@ const DEFAULT_ACE_CONFIG: AceConfigInterface = {
 		ReactiveFormsModule,
 		ChartsModule,
 		ParticlesModule,
-		AceModule
+		AceModule,
+		AngularFileUploaderModule
 	],
 	providers: [ClientService, CookieService, {
 		provide: ACE_CONFIG,

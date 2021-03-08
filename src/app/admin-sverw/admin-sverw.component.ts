@@ -55,85 +55,10 @@ export class AdminSverwComponent implements OnInit {
 			}
 		);
 		this.awaitServerResponse = true;
+		this.refreshList();
 		setInterval(() => {
-			this.service.sendDataToServerApi('getStudents').subscribe(
-				(res: { acces: string, waitingUsers: [{ username: string, lastLogin: string }], activeUsers: [{ username: string, cours: string, databases: number, lastLogin: string, access: string, name: string, forename: string, block: string }] }) => {
-					//console.log(this.data);
-					//console.log(res);
-					this.awaitServerResponse = false;
-					this.ergebnisCorrect = JSON.stringify(res);
-					//Wartende Nutzer
-					if (res.waitingUsers.length > 0) {
-						for (let i = 0; i < res.waitingUsers.length; i++) {
-							var isAlreadyIn: boolean = false;
-							for (let j = 0; j < this.dataWaiting.length; j++) {
-								if (this.dataWaiting[j].username == res.waitingUsers[i].username) {
-									isAlreadyIn = true;
-								}
-							}
-							if (!isAlreadyIn) {
-								this.dataWaiting.push({
-									username: res.waitingUsers[i].username,
-									lastLogin: res.waitingUsers[i].lastLogin,
-									selected: false
-								});
-								this.refresh = ["refresh"];
-							}
-						}
-					}
-
-					//Aktive Nutzer
-					if (res.activeUsers.length > 0) {
-						var isAlreadyIn: boolean = false;
-						for (let i = 0; i < res.activeUsers.length; i++) {
-							for (let j = 0; j < this.data.length; j++) {
-								if (this.data[j].class == res.activeUsers[i].cours) {
-									for (let k = 0; k < this.data[j].member.length; k++) {
-										if (this.data[j].member[k].username == res.activeUsers[i].username) {
-											isAlreadyIn = true;
-										}
-									}
-								}
-							}
-							if (!isAlreadyIn) {
-								var foundClass: boolean = false;
-								for (let j = 0; j < this.data.length; j++) {
-									if (this.data[j].class == res.activeUsers[i].cours) {
-										this.data[j].member.push({
-											username: res.activeUsers[i].username,
-											forename: res.activeUsers[i].forename,
-											lastname: res.activeUsers[i].name,
-											lastLogin: res.activeUsers[i].lastLogin,
-											noDatabase: res.activeUsers[i].databases,
-											selected: false
-										});
-										foundClass = true;
-									}
-								}
-								if (!foundClass) {
-									this.data.push({
-										class: res.activeUsers[i].cours,
-										member: [{
-											username: res.activeUsers[i].username,
-											forename: res.activeUsers[i].forename,
-											lastname: res.activeUsers[i].name,
-											lastLogin: res.activeUsers[i].lastLogin,
-											noDatabase: res.activeUsers[i].databases,
-											selected: false
-										}]
-									});
-								}
-							}
-						}
-					}
-				},
-				err => {
-					console.log(err);
-					this.ergebnisError = err.error.text + " -> FEHLER";
-
-				}
-			)
-		}, 7000);
+			this.refreshList();
+		}, 30000);
 	}
 
 	onClickNewUser() {
@@ -305,6 +230,7 @@ export class AdminSverwComponent implements OnInit {
 		console.log(event);
 		this.service.sendDataToServerApiWithData("allowUsers", { allowedUsers: event }).subscribe(
 			res => {
+				console.log(res);
 				this.awaitServerResponse = false;
 			},
 			err => {
@@ -312,6 +238,150 @@ export class AdminSverwComponent implements OnInit {
 				this.service.openSnackBar("Der Zugang konnte dem Nutzer nicht erlaubt werden. Bitte wenden Sie sich an einen Administartor!", "OK");
 			}
 		);
+	}
+
+	private refreshList() {
+		this.service.sendDataToServerApi('getStudents').subscribe(
+			(res: { acces: string, waitingUsers: [{ username: string, lastLogin: string }], activeUsers: [{ username: string, cours: string, databases: number, lastLogin: string, access: string, name: string, forename: string, block: string }] }) => {
+				this.awaitServerResponse = false;
+				this.ergebnisCorrect = JSON.stringify(res);
+
+				//Für wartende Nutzer:
+				res.waitingUsers.forEach(waitingUser => {
+					var oldEntry: boolean = false;
+					this.dataWaiting.forEach(waiting => {
+						if (waiting.username == waitingUser.username) {
+							oldEntry = true;
+						}
+					});
+					if (!oldEntry) {
+						this.dataWaiting.push({
+							username: waitingUser.username,
+							lastLogin: waitingUser.lastLogin,
+							selected: false
+						});
+					}
+				});
+				for (var i: number = 0; i < this.dataWaiting.length; i++) {
+					var deletEntry: boolean = true;
+					res.waitingUsers.forEach(waitingUser => {
+						if (this.dataWaiting[i].username == waitingUser.username) {
+							deletEntry = false;
+						}
+					});
+					if (deletEntry) {
+						this.dataWaiting.splice(i, 1);
+						i--;
+					}
+				}
+
+				//Für bestehende Nuter:
+				res.activeUsers.forEach(activUser => {
+					var oldEntry: boolean = false;
+					var oldClass: boolean = false;
+					this.data.forEach(c => {
+						if (c.class == activUser.cours) {
+							oldClass = true;
+							c.member.forEach(m => {
+								if (m.username == activUser.username) {
+									oldEntry = true;
+								}
+							});
+							if (!oldEntry) {
+								if (activUser.cours == "unknown") {
+									c.member.push({
+										forename: activUser.username,
+										lastLogin: activUser.lastLogin,
+										lastname: activUser.name,
+										noDatabase: activUser.databases,
+										selected: false,
+										username: activUser.username
+									})
+								} else {
+									c.member.push({
+										forename: activUser.forename,
+										lastLogin: activUser.lastLogin,
+										lastname: activUser.name,
+										noDatabase: activUser.databases,
+										selected: false,
+										username: activUser.username
+									});
+								}
+							}
+						}
+					});
+					if (!oldClass) {
+						if (activUser.cours == "unknown") {
+							this.data.push({
+								class: activUser.cours,
+								member: [{
+									username: activUser.username,
+									forename: activUser.username,
+									lastname: activUser.name,
+									lastLogin: activUser.lastLogin,
+									noDatabase: activUser.databases,
+									selected: false
+								}]
+							});
+						} else {
+							this.data.push({
+								class: activUser.cours,
+								member: [{
+									username: activUser.username,
+									forename: activUser.forename,
+									lastname: activUser.name,
+									lastLogin: activUser.lastLogin,
+									noDatabase: activUser.databases,
+									selected: false
+								}]
+							});
+						}
+					}
+				});
+				for (var i: number = 0; i < this.data.length; i++) {
+					var deletClass: boolean = true;
+					res.activeUsers.forEach(activeUser => {
+						if (this.data[i].class == activeUser.cours) {
+							deletClass = false;
+						}
+					});
+					if (deletClass) {
+						this.data.splice(i, 1);
+						i--;
+					} else {
+
+						var memberLenght: number = this.data[i].member.length;
+						for (var j: number = 0; j < memberLenght; j++) {
+
+							var deletMember: boolean = true;
+							res.activeUsers.forEach(activeUser => {
+								if (this.data[i].member[j].username == activeUser.username) {
+									deletMember = false;
+								}
+							});
+							if (deletMember) {
+								this.data[i].member.splice(j, 1);
+								j--;
+							}
+						}
+					}
+				}
+
+				//Refresh:
+				this.refresh = [Math.random().toString()]
+
+				//LOG:
+				console.log(this.dataWaiting);
+				console.log(this.data);
+
+
+			},
+			err => {
+				console.log(err);
+				this.ergebnisError = err.error.text + " -> FEHLER";
+
+			}
+		)
 	}
 
 }

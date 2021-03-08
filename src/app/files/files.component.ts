@@ -27,6 +27,37 @@ export class FilesComponent implements OnInit {
 	fullFileTree: dirStructur[] = [];
 	path: string[] = ["/"];
 	awaitingServerResponse: boolean = true;
+	afuConfig = {
+		multiple: true,
+		formatsAllowed: ".jpg,.png,.pdf,.docx,.txt,.gif,.jpeg,.html,.php,.py",
+		maxSize: "90",
+		uploadAPI: {
+			url: "http://80.151.1.57:1180/api.php",
+			method: "POST",
+			params: {
+				'action': 'uploadThisFile',
+				'user': localStorage.getItem("username"),
+				'pass': localStorage.getItem("password"),
+				'cours': localStorage.getItem("cours"),
+				'target': this.path
+			}
+		},
+		theme: "dragNDrop",
+		hideProgressBar: false,
+		hideResetBtn: false,
+		hideSelectBtn: false,
+		fileNameIndex: true,
+		replaceTexts: {
+			selectFileBtn: 'Datei auswählen',
+			resetBtn: 'Reset',
+			uploadBtn: 'Upload',
+			dragNDropBox: 'Drag N Drop',
+			attachPinBtn: 'Attach Files...',
+			afterUploadMsg_success: 'Upload erfolgreich!',
+			afterUploadMsg_error: 'Upload fehlgeschlagen!',
+			sizeLimit: 'Max. Größe'
+		}
+	};
 
 	refresh: string[] = ["refresh"];
 	ergebnisError: string;
@@ -74,24 +105,24 @@ export class FilesComponent implements OnInit {
 			}
 		);
 
-		setInterval(() => {
-			this.service.sendDataToServerApiWithData('getDir', { path: '/home/' + localStorage.getItem("username") + '/public_html' }).subscribe(
-				(res: { acces: string, dirTree: dirStructur[] }) => {
-					this.awaitingServerResponse = false;
-					this.fullFileTree = res.dirTree;
+		//setInterval(() => {
+		this.service.sendDataToServerApiWithData('getDir', { path: '/home/' + localStorage.getItem("username") + '/public_html' }).subscribe(
+			(res: { acces: string, dirTree: dirStructur[] }) => {
+				this.awaitingServerResponse = false;
+				this.fullFileTree = res.dirTree;
 
-					this.refreschTable();
+				this.refreschTable();
 
-					console.log(this.dataSource);
-					this.ergebnisCorrect = JSON.stringify(res);
-				},
-				err => {
-					console.log(err);
-					this.ergebnisError = err.error.text + " -> FEHLER";
+				console.log(this.dataSource);
+				this.ergebnisCorrect = JSON.stringify(res);
+			},
+			err => {
+				console.log(err);
+				this.ergebnisError = err.error.text + " -> FEHLER";
 
-				}
-			);
-		}, 5000);
+			}
+		);
+		//}, 5000);
 	}
 
 	public onClickDel(target) {
@@ -184,5 +215,9 @@ export class FilesComponent implements OnInit {
 		stringpath += name;
 		stringpath = encodeURIComponent(stringpath);
 		this.router.navigate(["/editor/" + stringpath]);
+	}
+
+	DocUpload(event) {
+		console.log(event);
 	}
 }

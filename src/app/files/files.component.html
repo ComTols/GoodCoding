@@ -1,17 +1,30 @@
-<mat-icon class="uploadNewFile">cloud_upload</mat-icon>
 <h1>Dateien</h1>
-<p>Hier findest du alle Dateien, die du hochgeladen hast. Du kannst jederzeit per Drag-and-Drop etwas hochladen
-	oder
-	du
-	benutzt den Upload-Button.
-</p>
-<p>
-	Mit einem Klick auf eine Datei kannst du diese im Online-Editor bearbeiten. Dadurch wird automatisch eine
-	Kopie
-	erstellt, in der die Änderungen gespeichert sind. Wenn du die Änderungen übernehmen möchtest, musst du das
-	Dokument über
-	den Speichern-Button abspeichern. Dadurch wird die Kopie gelöscht und alle Änderungen übertragen.
-</p>
+<table>
+	<tr>
+		<td>
+			<p>Hier findest du alle Dateien, die du hochgeladen hast. Du kannst jederzeit per Drag-and-Drop etwas
+				hochladen
+				oder
+				du
+				benutzt den Upload-Button.
+			</p>
+			<p>
+				Mit einem Klick auf eine Datei kannst du diese im Online-Editor bearbeiten. Dadurch wird automatisch
+				eine
+				Kopie
+				erstellt, in der die Änderungen gespeichert sind. Wenn du die Änderungen übernehmen möchtest, musst
+				du das
+				Dokument über
+				den Speichern-Button abspeichern. Dadurch wird die Kopie gelöscht und alle Änderungen übertragen.
+			</p>
+		</td>
+		<td>
+			<angular-file-uploader [config]="afuConfig" (ApiResponse)="DocUpload($event)">
+			</angular-file-uploader>
+		</td>
+	</tr>
+</table>
+
 <table *ngFor="let item of refresh" mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
 
 	<ng-container matColumnDef="type">

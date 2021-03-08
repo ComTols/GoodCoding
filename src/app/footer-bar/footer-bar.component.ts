@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterBarComponent implements OnInit {
 
-	username: string = "marianum";
+	username: string = localStorage.getItem("username");
 
 	constructor() { }
 
