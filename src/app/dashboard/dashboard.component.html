@@ -91,15 +91,16 @@
 	</mat-card>
 	<mat-card class="item">
 		<mat-card-title>
-			<mat-icon matBadge="">email</mat-icon><span style="margin-left: 1em;">Post</span>
+			<mat-icon [matBadge]="newMessagesNum">email</mat-icon><span
+				style="margin-left: 1em;">Arbeitsaufträge</span>
 		</mat-card-title>
 		<mat-card-content>
 			<mat-list>
 				<ng-container *ngFor="let item of messages">
-					<mat-list-item>
+					<mat-list-item (click)="openBottomSheet(item)">
 						<mat-icon mat-list-icon>{{item.isNew ? "markunread" : "drafts"}}</mat-icon>
 						<h2 style="font-weight: bold;" mat-line>{{item.head}}</h2>
-						<span mat-line>Von: {{item.from.forename}} {{item.from.lastname}}</span>
+						<span mat-line>{{item.body}}</span>
 					</mat-list-item>
 					<mat-divider></mat-divider>
 				</ng-container>

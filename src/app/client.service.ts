@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
 import { retry } from 'rxjs/operators';
 
 
@@ -24,7 +25,7 @@ export class ClientService {
 		this.snackBar.open(message, action);
 	}
 
-	public sendDataToServerApi(action: string) {
+	public sendDataToServerApi(action: string): Observable<Object> {
 		const body = {
 			'action': action,
 			'user': localStorage.getItem("username"),
@@ -34,7 +35,7 @@ export class ClientService {
 		return this.http.post(this.url, body).pipe(retry(this.connectionRetry));
 	}
 
-	public sendDataToServerApiWithData(action: string, data: {}) {
+	public sendDataToServerApiWithData(action: string, data: {}): Observable<Object> {
 		const body = {
 			'action': action,
 			'user': localStorage.getItem("username"),

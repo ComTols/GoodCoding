@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>Name eingeben</h2>
+<mat-dialog-content [formGroup]="newName">
+	<p>Bitte geben Sie Ihren Vor- und Nachnamen richtig ein:</p>
+	<mat-form-field appearance="outline">
+		<mat-label>Vorname</mat-label>
+		<input type="text" matInput required name="forename" formControlName="forename">
+	</mat-form-field>
+	<mat-form-field appearance="outline">
+		<mat-label>Nachname</mat-label>
+		<input type="text" matInput required name="lastname" formControlName="lastname">
+	</mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button mat-button (click)="onClickOkay()">Okay</button>
+</mat-dialog-actions>

@@ -1,20 +1,20 @@
-import { AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
 import { BaseChartDirective } from 'ng2-charts';
 import { ClientService } from '../client.service';
+import { MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
+import { BottomSheetMessage } from '../dashboard/dashboard.component';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-export interface message {
-	from: user,
+
+interface message {
 	head: string,
 	body: string,
-	toClass: boolean
-}
-
-interface user {
-	username: string,
-	forename: string,
-	lastname: string,
-	class: string
+	toClass?: string,
+	send: Date
+	liveTime: number,
+	isNew?: boolean
 }
 
 @Component({
@@ -69,20 +69,20 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 	public username: string = localStorage.getItem("username");
 
 	public messages: message[] = [{
-		from: {
-			username: "",
-			forename: "Sie haben noch keine Nachrichten erhalten.",
-			lastname: "",
-			class: ""
-		},
-		head: "Keine Nachrichten!",
-		body: "",
-		toClass: false
+		head: "Keine Aufträge",
+		body: "Es sind noch keine Aufträge für dich vorhanden",
+		send: new Date(),
+		liveTime: 36288000000,
+		isNew: false
 	}];
+
+	private classes: string[] = [];
 
 	constructor(
 		private router: Router,
-		private service: ClientService
+		private service: ClientService,
+		private _bottomSheet: MatBottomSheet,
+		public dialog: MatDialog
 	) {
 		for (var i: number = -60; i <= 0; i++) {
 			this.memoryChartLabels.push(i);
@@ -120,6 +120,38 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 				}
 			);
 		}, 1000);
+
+		this.service.sendDataToServerApi("needName").subscribe((res: { acces: string, needName: boolean }) => {
+			console.log(res);
+			if (res.needName) {
+				this.openNewNameDialog();
+			}
+		}, err => {
+			console.log(err);
+
+		});
+	}
+
+	openNewNameDialog() {
+		let dialogRef = this.dialog.open(NeedNameDialog);
+		dialogRef.afterClosed().subscribe((result: { forename: string, lastname: string }) => {
+			console.log(result);
+
+			if (result == undefined) {
+				this.openNewNameDialog();
+				return;
+			}
+
+			this.service.sendDataToServerApiWithData("setName", {
+				forename: result.forename,
+				lastname: result.lastname
+			}).subscribe((res) => {
+				console.log(res);
+			}, err => {
+				console.log(err);
+			});
+
+		});
 	}
 
 	ngOnInit(): void {
@@ -142,19 +174,10 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 				this.router.navigate([""]);
 			}
 		);
+		this.getMessages();
 		setInterval(() => {
-			this.service.sendDataToServerApi("getMessages").subscribe(
-				(res: { acces: string, messagesToMe: message[] }) => {
-					console.log(res);
-					if (res.messagesToMe.length != 0) {
-						this.messages = res.messagesToMe;
-					}
-				},
-				err => {
-					console.log(err);
-				}
-			);
-		}, 15000);
+			this.getMessages();
+		}, 30000);
 	}
 
 	ngOnDestroy(): void {
@@ -163,5 +186,135 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 		clearInterval(this.interval);
 	}
 
+	getMessages() {
+		this.service.sendDataToServerApi("getMessages").subscribe(
+			(res: { acces: string, allMessages: message[], allClasses: string[] }) => {
+				console.log(res);
+				if (res.allMessages.length != 0) {
+					this.messages = res.allMessages;
+
+					this.messages.forEach(e => {
+						console.log(e.send);
+						console.log(e.liveTime);
+
+						e.send = new Date(e.send);
+
+						console.log((e.send.getTime() + e.liveTime * 1000) + " > " + new Date().getTime());
+
+
+						if ((e.send.getTime() + e.liveTime) > new Date().getTime()) {
+							e.isNew = true;
+						} else {
+							e.isNew = false;
+						}
+					});
+				}
+				this.classes = res.allClasses;
+			},
+			err => {
+				console.log(err);
+			}
+		);
+	}
+
+	openBottomSheet(m: message) {
+		console.log(m);
+		this._bottomSheet.open(BottomSheetMessage, {
+			data: {
+				message: m,
+				showActions: true
+			}
+		});
+	}
+
+	newMessage() {
+		console.log(this.classes);
+
+		let dialogRef = this.dialog.open(NewMessageDialog, {
+			width: '50%',
+			data: {
+				classes: this.classes
+			}
+		});
+		dialogRef.afterClosed().subscribe((result: { subject: string, message: string, receiver: string }) => {
+			if (result == undefined) return;
+
+			this.service.sendDataToServerApiWithData("sendMessage", {
+				subject: result.subject,
+				message: result.message,
+				receiver: result.receiver
+			}).subscribe((res) => {
+				console.log(res);
+			}, err => {
+				console.log(err);
+			});
+
+		});
+	}
 
 }
+
+@Component({
+	selector: 'new-message-dialog',
+	templateUrl: 'new-message-dialog.html',
+	styleUrls: []
+})
+export class NewMessageDialog implements OnInit {
+
+
+	newMessage: FormGroup = new FormGroup({
+		message: new FormControl(null, [Validators.required]),
+		subject: new FormControl(null, [Validators.required]),
+		receiver: new FormControl(null, [Validators.required])
+	});
+
+	constructor(
+		public dialogRef: MatDialogRef<NewMessageDialog>,
+		@Inject(MAT_DIALOG_DATA) public data: { classes: string[] }
+	) { }
+
+	ngOnInit(): void {
+		console.log(this.data.classes);
+
+	}
+
+	onClickSend() {
+		if (!this.newMessage.valid) return;
+		this.dialogRef.close({
+			subject: this.newMessage.value["subject"],
+			message: this.newMessage.value["message"],
+			receiver: this.newMessage.value["receiver"]
+		})
+	}
+
+
+}
+@Component({
+	selector: 'need-name-dialog',
+	templateUrl: 'need-name-dialog.html',
+	styleUrls: []
+})
+export class NeedNameDialog implements OnInit {
+
+
+	newName: FormGroup = new FormGroup({
+		forename: new FormControl(null, [Validators.required]),
+		lastname: new FormControl(null, [Validators.required])
+	});
+
+	constructor(
+		public dialogRef: MatDialogRef<NewMessageDialog>) { }
+
+	ngOnInit(): void {
+	}
+
+	onClickOkay() {
+		if (!this.newName.valid) return;
+		this.dialogRef.close({
+			forename: this.newName.value["forename"],
+			lastname: this.newName.value["lastname"]
+		})
+	}
+
+}
+

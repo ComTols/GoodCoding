@@ -57,6 +57,16 @@ export class AppComponent {
 			admin: true,
 			showInNavBar: true
 		}, {
+			url: 'files',
+			name: 'Dateien',
+			admin: true,
+			showInNavBar: true
+		}, {
+			url: 'phpmyadmin',
+			name: 'Datenbank',
+			admin: true,
+			showInNavBar: true
+		}, {
 			url: 'admin/workload',
 			name: 'Auslastung',
 			admin: true,
@@ -79,6 +89,16 @@ export class AppComponent {
 		}, {
 			url: "imprint",
 			name: "Impressum",
+			admin: false,
+			showInNavBar: false
+		}, {
+			url: 'logout',
+			name: 'Log Out',
+			admin: true,
+			showInNavBar: true
+		}, {
+			url: '404',
+			name: 'Seite nicht gefunden',
 			admin: false,
 			showInNavBar: false
 		}
@@ -121,7 +141,6 @@ export class AppComponent {
 		service: ClientService
 	) {
 		router.events.subscribe((url: any) => {
-			console.log(url);
 			if (url.url == undefined) {
 				return;
 			}
@@ -150,23 +169,34 @@ export class AppComponent {
 					name: "Editor",
 					admin: false
 				}
+			} else if (url.url == "/404") {
+				console.log("URL: 404");
+
+				this.isLogin = false;
+				this.isAdmin = false;
+				this.isWait = true;
+				this.site = this.navItems[16];
 			} else if (url.url != "/") {
 				this.isLogin = false;
 				this.isAdmin = false;
 				this.isWait = false;
-				console.log(url.url);
-
 				for (var i = 0; i < this.navItems.length; i++) {
 					if (url.url == ("/" + this.navItems[i].url)) {
 						this.site = this.navItems[i];
 					}
 				}
-			} else {
+			} else if (url.url == "/") {
 				this.isLogin = true;
 				this.site = { name: "Login", url: "login", admin: false };
+			} else {
+				console.log("URL: 404");
+
+				this.isLogin = false;
+				this.isAdmin = false;
+				this.isWait = true;
+				this.site = this.navItems[16];
 			}
 		});
-		console.log(router.url);
 	}
 
 	@HostListener('window:scroll', ['$event'])

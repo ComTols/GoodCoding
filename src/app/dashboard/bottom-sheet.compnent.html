@@ -1,0 +1,17 @@
+<mat-card style="max-width: 545px;">
+	<mat-card-header>
+		<div mat-card-avatar>
+			<mat-icon>{{data.message.isNew ? "markunread" : "drafts"}}</mat-icon>
+		</div>
+		<mat-card-title>{{data.message.head}}</mat-card-title>
+		<mat-card-subtitle>Betreff</mat-card-subtitle>
+	</mat-card-header>
+	<mat-card-content>
+		<p>{{data.message.body}}</p>
+	</mat-card-content>
+	<mat-card-actions>
+		<p style="font-size: 10px;color: gray;margin-bottom: 0;">Gesendet: {{data.message.send}}</p>
+		<p style="font-size: 10px;color: gray;">Bearbeitungszeit: {{data.message.liveTime}} Sekunden</p>
+		<button *ngIf="data.showActions">Löschen</button>
+	</mat-card-actions>
+</mat-card>

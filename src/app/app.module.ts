@@ -1,3 +1,4 @@
+import { BottomSheetMessage } from './dashboard/dashboard.component';
 import { ClientService } from './client.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -34,6 +35,8 @@ import { ACE_CONFIG } from 'ngx-ace-wrapper';
 import { AceConfigInterface } from 'ngx-ace-wrapper';
 import { FiletreeComponent } from './files/editor/filetree/filetree.component';
 import { LogoutComponent } from './logout/logout.component';
+import { NeedNameDialog, NewMessageDialog } from './admin-dashboard/admin-dashboard.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
 };
@@ -58,9 +61,24 @@ const DEFAULT_ACE_CONFIG: AceConfigInterface = {
 		PermittAdminDialogComponent,
 		EditorComponent,
 		FiletreeComponent,
-		LogoutComponent
+		LogoutComponent,
+		BottomSheetMessage,
+		NewMessageDialog,
+		NeedNameDialog,
+		NotFoundComponent
 	],
-	entryComponents: [RenameDialogComponent, DelDialogComponent, MoveDialogComponent, AddClassDialogComponent, DeleteDialogComponent, LockDialogComponent, PermittAdminDialogComponent],
+	entryComponents: [
+		RenameDialogComponent,
+		DelDialogComponent,
+		MoveDialogComponent,
+		AddClassDialogComponent,
+		DeleteDialogComponent,
+		LockDialogComponent,
+		PermittAdminDialogComponent,
+		BottomSheetMessage,
+		NewMessageDialog,
+		NeedNameDialog
+	],
 	imports: [
 		BrowserModule,
 		HttpClientModule,

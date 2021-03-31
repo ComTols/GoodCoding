@@ -1,10 +1,17 @@
 <h2 mat-dialog-title style="color: red;">Endgültig löschen!</h2>
-<mat-dialog-content>
+<mat-dialog-content *ngIf="!isNotEmptyDir">
 	<p>Achtung! Sie sind dabei, diese Datei endgültig zu löschen! Nach dem löschen kann die Datei <b>NICHT</b>
 		wiederhergestellt werden!</p>
 	<p>Sind Sie sicher, dass Sie die Datei löschen möchten?</p>
 </mat-dialog-content>
-<mat-dialog-actions>
+<mat-dialog-content *ngIf="isNotEmptyDir">
+	<p>Achtung! Sie können nur leere Ordner löschen!</p>
+	<p>Bitte löschen Sie zuerst den Inhalt des Ordners, bevor Sie den Ordner löschen!</p>
+</mat-dialog-content>
+<mat-dialog-actions *ngIf="!isNotEmptyDir">
 	<button mat-button mat-dialog-close mat-dialog-close="false">Nein</button>
 	<button mat-button mat-dialog-close mat-dialog-close="true">Ja</button>
+</mat-dialog-actions>
+<mat-dialog-actions *ngIf="isNotEmptyDir">
+	<button mat-button mat-dialog-close mat-dialog-close="false">Abbrechen</button>
 </mat-dialog-actions>

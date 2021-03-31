@@ -40,45 +40,73 @@
 	</mat-card>
 	<mat-card class="item">
 		<mat-card-title>
-			<mat-icon matBadge="5">email</mat-icon><span style="margin-left: 1em;">Post</span>
+			<mat-icon>email</mat-icon><span style="margin-left: 1em;">Arbeitsaufträge</span>
 		</mat-card-title>
 		<mat-card-content>
 			<mat-list>
 				<ng-container *ngFor="let item of messages">
-					<mat-list-item>
+					<mat-list-item (click)="openBottomSheet(item)">
 						<mat-icon mat-list-icon>{{item.isNew ? "markunread" : "drafts"}}</mat-icon>
-						<h2 style="font-weight: bold;" mat-line>{{item.head}}</h2>
-						<span mat-line>Von: {{item.from.forename}} {{item.from.lastname}}</span>
+						<h2 style="font-weight: bold;" mat-line>(An: {{item.toClass}}) {{item.head}}</h2>
+						<span mat-line>{{item.body}}</span>
 					</mat-list-item>
 					<mat-divider></mat-divider>
 				</ng-container>
 			</mat-list>
 		</mat-card-content>
+		<mat-card-actions>
+			<button mat-button (click)="newMessage()">Neu</button>
+		</mat-card-actions>
 	</mat-card>
 	<mat-card class="item">
-		<mat-card-title>
-			Sonstige Informationen
-		</mat-card-title>
+		<mat-card-title>FTP-Zugangsdaten</mat-card-title>
 		<mat-card-content>
 			<mat-list>
 				<mat-list-item>
-					<mat-icon mat-list-icon>history</mat-icon>
-					<h2 mat-line>PHP Version</h2>
-					<span mat-line>Version 7.3</span>
+					<mat-icon mat-list-icon>dns</mat-icon>
+					<h2 mat-line>Übertragunsprotokoll</h2>
+					<span mat-line>FTP</span>
 				</mat-list-item>
 				<mat-divider></mat-divider>
 				<mat-list-item>
-					<mat-icon mat-list-icon>history</mat-icon>
-					<h2 mat-line>Domain</h2>
-					<a mat-line
-						href="http://www.info.marianumlan.de/~{{username}}">www.info.marianumlan.de/~{{username}}</a>
+					<mat-icon mat-list-icon>https</mat-icon>
+					<h2 mat-line>Verschlüsselung</h2>
+					<span mat-line>TLS/SSL Explizite Verschlüsselung</span>
 				</mat-list-item>
 				<mat-divider></mat-divider>
-				<mat-list-item>
-					<mat-icon mat-list-icon>history</mat-icon>
-					<h2 mat-line>FTP-Zugang</h2>
-					<span mat-line>Ein Zugang freigeschaltet</span>
-				</mat-list-item>
+				<mat-grid-list cols="2" rowHeight="72px">
+					<mat-grid-tile>
+						<mat-list-item>
+							<mat-icon mat-list-icon>language</mat-icon>
+							<h2 mat-line>Serveradresse</h2>
+							<span mat-line>marianumlan.de</span>
+						</mat-list-item>
+					</mat-grid-tile>
+					<mat-grid-tile>
+						<mat-list-item>
+							<mat-icon mat-list-icon>account_balance_wallet</mat-icon>
+							<h2 mat-line>Port</h2>
+							<span mat-line>6421</span>
+						</mat-list-item>
+					</mat-grid-tile>
+				</mat-grid-list>
+				<mat-divider></mat-divider>
+				<mat-grid-list cols="2" rowHeight="72px">
+					<mat-grid-tile>
+						<mat-list-item>
+							<mat-icon mat-list-icon>perm_identity</mat-icon>
+							<h2 mat-line>Benutzername</h2>
+							<span mat-line>{{username}}</span>
+						</mat-list-item>
+					</mat-grid-tile>
+					<mat-grid-tile>
+						<mat-list-item>
+							<mat-icon mat-list-icon>password</mat-icon>
+							<h2 mat-line>Passwort</h2>
+							<span mat-line>Wie bei Login</span>
+						</mat-list-item>
+					</mat-grid-tile>
+				</mat-grid-list>
 			</mat-list>
 		</mat-card-content>
 	</mat-card>

@@ -24,6 +24,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 const material = [
 	MatFormFieldModule,
@@ -50,7 +51,8 @@ const material = [
 	MatChipsModule,
 	MatSlideToggleModule,
 	MatTreeModule,
-	MatTooltipModule
+	MatTooltipModule,
+	MatBottomSheetModule
 ];
 
 @NgModule({

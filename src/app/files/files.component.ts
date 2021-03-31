@@ -32,7 +32,7 @@ export class FilesComponent implements OnInit {
 		formatsAllowed: ".jpg,.png,.pdf,.docx,.txt,.gif,.jpeg,.html,.php,.py",
 		maxSize: "90",
 		uploadAPI: {
-			url: "http://80.151.1.57:1180/api.php",
+			url: "https://goodcoding.marianum-fulda.de/api.php",
 			method: "POST",
 			params: {
 				'action': 'uploadThisFile',
@@ -67,23 +67,7 @@ export class FilesComponent implements OnInit {
 		public service: ClientService,
 		public dialog: MatDialog,
 		public router: Router
-	) {
-		this.service.sendDataToServerApiWithData('getDir', { path: '/home/' + localStorage.getItem("username") + '/public_html' }).subscribe(
-			(res: { acces: string, dirTree: dirStructur[] }) => {
-				this.awaitingServerResponse = false;
-				this.fullFileTree = res.dirTree;
-
-				this.refreschTable();
-
-				console.log(this.dataSource);
-				this.ergebnisCorrect = JSON.stringify(res);
-			},
-			err => {
-				console.log(err);
-				service.openSnackBar("Der Server antwortet nicht. Bitte wenden Sie sich an einen Administrator!", "Okay");
-			}
-		);
-	}
+	) { }
 
 	ngOnInit(): void {
 		this.service.sendDataToServerApi('userLogin').subscribe(
@@ -106,31 +90,40 @@ export class FilesComponent implements OnInit {
 		);
 
 		//setInterval(() => {
-		this.service.sendDataToServerApiWithData('getDir', { path: '/home/' + localStorage.getItem("username") + '/public_html' }).subscribe(
-			(res: { acces: string, dirTree: dirStructur[] }) => {
-				this.awaitingServerResponse = false;
-				this.fullFileTree = res.dirTree;
-
-				this.refreschTable();
-
-				console.log(this.dataSource);
-				this.ergebnisCorrect = JSON.stringify(res);
-			},
-			err => {
-				console.log(err);
-				this.ergebnisError = err.error.text + " -> FEHLER";
-
-			}
-		);
+		this.getDir();
 		//}, 5000);
 	}
 
 	public onClickDel(target) {
 		console.log(target);
-		let dialogRef = this.dialog.open(DelDialogComponent);
+		let dialogRef = this.dialog.open(DelDialogComponent, {
+			data: {
+				target: target
+			}
+		});
 		dialogRef.afterClosed().subscribe(result => {
-			if (result != false) {
-				//TODO: löschen
+			console.log(result);
+
+			if (result) {
+				var aktPath = "/";
+				for (var i: number = 1; i < this.path.length; i++) {
+					aktPath += this.path[i];
+					aktPath += "/";
+				};
+				aktPath += target.name;
+				console.log(aktPath);
+				this.service.sendDataToServerApiWithData("delFileOrDir", {
+					path: aktPath
+				}).subscribe(
+					res => {
+						console.log(res);
+						this.refreschTable();
+					},
+					err => {
+						console.error(err);
+
+					}
+				);
 			}
 		});
 	}
@@ -162,7 +155,7 @@ export class FilesComponent implements OnInit {
 	}
 
 	refreschTable() {
-		var dirContent: dirStructur[];
+		var dirContent: dirStructur[] = [];
 		this.path.forEach(e => {
 			if (e == "/") {
 				dirContent = this.fullFileTree;
@@ -174,6 +167,8 @@ export class FilesComponent implements OnInit {
 				}
 			}
 		});
+		if (dirContent == undefined) return;
+
 		for (var j: number = 0; j < dirContent.length; j++) {
 			if (dirContent[j].type == "file") {
 				dirContent[j].type = "description";
@@ -219,5 +214,36 @@ export class FilesComponent implements OnInit {
 
 	DocUpload(event) {
 		console.log(event);
+		var fails: string = "";
+		event.body.uploadStatus.forEach(e => {
+			if (e.status != "ok") {
+				fails += e.filename + ", ";
+			}
+		});
+		if (fails.length > 0) {
+			fails = fails.substr(0, fails.length - 2);
+			this.service.openSnackBar("Folgende Dateien wurden nicht hochgeladen: " + fails, "OK");
+		}
+
+		this.getDir();
+	}
+
+	getDir() {
+		this.service.sendDataToServerApiWithData('getDir', { path: '/home/' + localStorage.getItem("username") + '/public_html' }).subscribe(
+			(res: { acces: string, dirTree: dirStructur[] }) => {
+				this.awaitingServerResponse = false;
+				this.fullFileTree = res.dirTree;
+
+				this.refreschTable();
+
+				console.log(this.dataSource);
+				this.ergebnisCorrect = JSON.stringify(res);
+			},
+			err => {
+				console.log(err);
+				this.ergebnisError = err.error.text + " -> FEHLER";
+
+			}
+		);
 	}
 }

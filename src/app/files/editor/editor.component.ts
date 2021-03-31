@@ -41,24 +41,30 @@ export class EditorComponent implements OnInit {
 	value = "text";
 	theme = "twilight"
 	mode = "html";
-	languages: { value: string, text: string }[] = [{
+	languages: { value: string, text: string, extension: string }[] = [{
 		value: "html",
-		text: "HTML"
+		text: "HTML",
+		extension: "html"
 	}, {
 		value: "javascript",
-		text: "JavaScript"
+		text: "JavaScript",
+		extension: "js"
 	}, {
 		value: "css",
-		text: "CSS"
+		text: "CSS",
+		extension: "css"
 	}, {
 		value: "text",
-		text: "Nur Text"
+		text: "Nur Text",
+		extension: "txt"
 	}, {
 		value: "php",
-		text: "PHP"
+		text: "PHP",
+		extension: "php"
 	}, {
 		value: "typescript",
-		text: "TypeScript"
+		text: "TypeScript",
+		extension: "ts"
 	}];
 
 	source: FileNode[] = [];
@@ -147,8 +153,6 @@ export class EditorComponent implements OnInit {
 	onClickFile(path: string) {
 		//TODO: Datei öffnen
 		path = path.replace("root/", "");
-		console.log(path);
-
 		this.getFile(path);
 	}
 
@@ -212,13 +216,16 @@ export class EditorComponent implements OnInit {
 	}
 
 	onClickSave() {
-		this.service.sendDataToServerApiWithData("saveFile", { path: "/home/" + localStorage.getItem("username") + "/public_html/" + this.aktPath, fileContent: this.value }).subscribe(
-			(res) => {
-				console.log(res);
+		this.service.sendDataToServerApiWithData("saveFile", { path: this.aktPath, fileContent: this.value }).subscribe(
+			(res: { acces: string, saveFileError: boolean }) => {
+				if (!res.saveFileError) {
+					this.service.openSnackBar("Die Datei konnte nicht gespeichert werden!", "OK");
+				}
 
 			},
 			err => {
 				console.error(err);
+				this.service.openSnackBar("Ein Fehler ist aufgetreten!", "OK");
 			}
 		);
 	}
@@ -230,6 +237,13 @@ export class EditorComponent implements OnInit {
 					console.log(res);
 					this.value = res.fileContent;
 					this.aktPath = path;
+					var pathParts = path.split(".");
+					var extension = pathParts[pathParts.length - 1];
+					this.languages.forEach(l => {
+						if (l.extension == extension) {
+							this.mode = l.value;
+						}
+					});
 				},
 				err => {
 					console.error(err);
