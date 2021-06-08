@@ -53,6 +53,9 @@ const routes: Routes = [{
 	path: 'admin/all',
 	component: AllComponent
 }, {
+	path: 'admin/files',
+	component: FilesComponent
+}, {
 	path: 'wait',
 	component: WaitComponent
 }, {

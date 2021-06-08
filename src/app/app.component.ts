@@ -57,7 +57,7 @@ export class AppComponent {
 			admin: true,
 			showInNavBar: true
 		}, {
-			url: 'files',
+			url: 'admin/files',
 			name: 'Dateien',
 			admin: true,
 			showInNavBar: true
@@ -89,6 +89,21 @@ export class AppComponent {
 		}, {
 			url: "imprint",
 			name: "Impressum",
+			admin: false,
+			showInNavBar: false
+		}, {
+			url: "contact",
+			name: "Kontakt",
+			admin: false,
+			showInNavBar: false
+		}, {
+			url: "settings",
+			name: "Einstellungen",
+			admin: false,
+			showInNavBar: false
+		}, {
+			url: "faq",
+			name: "FAQ",
 			admin: false,
 			showInNavBar: false
 		}, {

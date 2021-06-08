@@ -1,9 +1,9 @@
-<h2 mat-dialog-title>Umbenennen</h2>
+<h2 mat-dialog-title>Neue Datei</h2>
 <mat-dialog-content [formGroup]="newNameGroup">
-	<p>Bitte legen Sie einen neuen Namen für diese Datei/dieses Verzeichnis fest. Beachten Sie, dass die Dateiendung
-		nicht übernommen wird!</p>
+	<p>Die Datei wird im aktuellen Verzeichnis angelegt. Bitte wähle einen geeigneten Namen und achte auf die
+		Dateiendung.</p>
 	<mat-form-field appearance="outline">
-		<mat-label>Neuer Name</mat-label>
+		<mat-label>Name</mat-label>
 		<input type="text" matInput required name="newName" formControlName="newName">
 	</mat-form-field>
 </mat-dialog-content>

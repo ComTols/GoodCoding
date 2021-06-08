@@ -37,6 +37,7 @@ import { FiletreeComponent } from './files/editor/filetree/filetree.component';
 import { LogoutComponent } from './logout/logout.component';
 import { NeedNameDialog, NewMessageDialog } from './admin-dashboard/admin-dashboard.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { NewFileComponent } from './files/new-file/new-file.component';
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {
 };
@@ -65,7 +66,8 @@ const DEFAULT_ACE_CONFIG: AceConfigInterface = {
 		BottomSheetMessage,
 		NewMessageDialog,
 		NeedNameDialog,
-		NotFoundComponent
+		NotFoundComponent,
+		NewFileComponent
 	],
 	entryComponents: [
 		RenameDialogComponent,
@@ -77,7 +79,8 @@ const DEFAULT_ACE_CONFIG: AceConfigInterface = {
 		PermittAdminDialogComponent,
 		BottomSheetMessage,
 		NewMessageDialog,
-		NeedNameDialog
+		NeedNameDialog,
+		NewFileComponent
 	],
 	imports: [
 		BrowserModule,

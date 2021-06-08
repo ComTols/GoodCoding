@@ -1,3 +1,4 @@
+import { NewFileComponent } from './new-file/new-file.component';
 import { Router } from '@angular/router';
 import { MoveDialogComponent } from './move-dialog/move-dialog.component';
 import { DelDialogComponent } from './del-dialog/del-dialog.component';
@@ -5,6 +6,7 @@ import { RenameDialogComponent } from './rename-dialog/rename-dialog.component';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ClientService } from '../client.service';
+import { stringify } from '@angular/compiler/src/util';
 
 
 export interface dirStructur {
@@ -29,7 +31,7 @@ export class FilesComponent implements OnInit {
 	awaitingServerResponse: boolean = true;
 	afuConfig = {
 		multiple: true,
-		formatsAllowed: ".jpg,.png,.pdf,.docx,.txt,.gif,.jpeg,.html,.php,.py",
+		formatsAllowed: ".html,.css,.scss,.js,.ts,.php,.txt,.log,.png,.jpg,.jpeg,.gif,.mp4,.mp3",
 		maxSize: "90",
 		uploadAPI: {
 			url: "https://goodcoding.marianum-fulda.de/api.php",
@@ -95,35 +97,29 @@ export class FilesComponent implements OnInit {
 	}
 
 	public onClickDel(target) {
-		console.log(target);
 		let dialogRef = this.dialog.open(DelDialogComponent, {
 			data: {
 				target: target
 			}
 		});
 		dialogRef.afterClosed().subscribe(result => {
-			console.log(result);
-
-			if (result) {
-				var aktPath = "/";
-				for (var i: number = 1; i < this.path.length; i++) {
-					aktPath += this.path[i];
-					aktPath += "/";
-				};
-				aktPath += target.name;
-				console.log(aktPath);
-				this.service.sendDataToServerApiWithData("delFileOrDir", {
-					path: aktPath
-				}).subscribe(
+			if (result == "true") {
+				var pathFrom: string = "";
+				for (let i = 1; i < this.path.length; i++) {
+					pathFrom += "/";
+					pathFrom += this.path[i];
+				}
+				pathFrom += "/" + target.name;
+				console.log("Löschen von " + pathFrom);
+				this.service.sendDataToServerApiWithData("delFileOrDir", pathFrom).subscribe(
 					res => {
+						this.getDir();
 						console.log(res);
-						this.refreschTable();
 					},
 					err => {
 						console.error(err);
-
 					}
-				);
+				)
 			}
 		});
 	}
@@ -131,21 +127,66 @@ export class FilesComponent implements OnInit {
 	public onClickRename(target) {
 		let dialogRef = this.dialog.open(RenameDialogComponent);
 		dialogRef.afterClosed().subscribe(result => {
-			if (result != false) {
-				//TODO: Umbenennen
+			if (result != "false") {
+				var pathFrom: string = "";
+				for (let i = 1; i < this.path.length; i++) {
+					pathFrom += "/";
+					pathFrom += this.path[i];
+				}
+				var pathTo: string = pathFrom + "/" + result;
+				pathFrom += "/" + target.name;
+				console.log("Umbenennen von " + pathFrom + " zu " + result);
+				this.service.sendDataToServerApiWithData("moveFile", { from: pathFrom, to: pathTo }).subscribe(
+					res => {
+						this.getDir();
+						console.log(res);
+
+					},
+					err => {
+						console.error(err);
+					}
+				)
 			}
 		});
-		console.log(target);
-
 	}
+
 	public onClickMove(target) {
-		console.log(target);
-		console.log(target);
-		let dialogRef = this.dialog.open(MoveDialogComponent);
+		let dialogRef = this.dialog.open(MoveDialogComponent, {
+			data: {
+				tree: this.fullFileTree
+			}
+		});
 		dialogRef.afterClosed().subscribe(result => {
-			if (result != false) {
-				console.log(result);
-				//TODO: Verschieben
+			if (result != "false") {
+				var pathFrom: string = "";
+				for (let i = 1; i < this.path.length; i++) {
+					pathFrom += "/";
+					pathFrom += this.path[i];
+				}
+				pathFrom += "/" + target.name;
+
+				var pathTo: string = "";
+				for (let j = 1; j < result.length; j++) {
+					pathTo += "/";
+					pathTo += result[j];
+				}
+				pathTo += "/" + target.name;
+
+				if (pathFrom == pathTo) {
+					console.log("Verschiebe nicht");
+					return;
+				}
+				console.log("Verschiebe von " + pathFrom + " nach " + pathTo);
+				this.service.sendDataToServerApiWithData("moveFile", { from: pathFrom, to: pathTo }).subscribe(
+					res => {
+						this.getDir();
+						console.log(res);
+
+					},
+					err => {
+						console.error(err);
+					}
+				)
 			}
 		});
 	}
@@ -245,5 +286,29 @@ export class FilesComponent implements OnInit {
 
 			}
 		);
+	}
+
+	onClickNewFile(event) {
+		let dialogRef = this.dialog.open(NewFileComponent);
+		dialogRef.afterClosed().subscribe(result => {
+			if (result != "false") {
+				console.log(result);
+
+				var path: string = "";
+				for (var i: number = 1; i < this.path.length; i++) {
+					path += "/";
+					path += this.path[i];
+				}
+				path += "/" + result;
+				this.service.sendDataToServerApiWithData("newFile", path).subscribe(
+					res => {
+						this.getDir();
+					},
+					err => {
+						console.error(err);
+					}
+				);
+			}
+		});
 	}
 }

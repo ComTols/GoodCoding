@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Inject, } from '@angular/core';
+import { dirStructur } from '../files.component';
 
 interface dirTree {
 	name: string,
@@ -44,9 +47,34 @@ export class MoveDialogComponent implements OnInit {
 	path: string[] = ["root"];
 	refresh: string[] = ["refresh"];
 
-	constructor() {
+	constructor(
+		@Inject(MAT_DIALOG_DATA) public data: { tree: dirStructur[] }
+	) {
+		console.log(data.tree);
+		this.dataSource = this.recFillInDirTree(data.tree, ["root"]);
+		console.log(this.dataSource);
 		this.aktDir = this.dataSource;
-		this.path.length
+	}
+
+	recFillInDirTree(e: dirStructur[], path: string[]): dirTree[] {
+		var ret: dirTree[] = [];
+		e.forEach(element => {
+			if (element.type == "folder" || element.type == "dir") {
+				var tmp: dirTree = {
+					name: element.name,
+					lastChange: element.lastModified,
+					path: path
+				};
+				if (element.content?.length > 0) {
+					var tmpPath: string[] = path;
+					tmpPath.push(element.name);
+					tmp.children = this.recFillInDirTree(element.content, tmpPath);
+				}
+				ret.push(tmp);
+			}
+		});
+
+		return ret;
 	}
 
 	ngOnInit(): void {

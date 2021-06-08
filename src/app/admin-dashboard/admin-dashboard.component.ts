@@ -90,6 +90,16 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 			this.cpuChartLabels.push(i);
 			this.cpuChartData[0].data.push(0);
 		}
+
+		this.service.sendDataToServerApi("getFreeSpace").subscribe(
+			(res: { acces: string, available: number, used: number }) => {
+				console.log(res);
+				this.storageChartData = [{ data: [res.used, (res.available - res.used)] }];
+			},
+			err => {
+				console.error(err);
+			}
+		);
 	}
 	ngAfterViewInit(): void {
 		console.log(this.charts);

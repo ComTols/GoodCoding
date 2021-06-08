@@ -8,7 +8,8 @@
 				[chartType]="storageChartType"></canvas>
 			<p>
 				<b style="text-align: center;">
-					200MB von 1GB
+					{{storageChartData[0].data[0]}}MB von
+					{{(storageChartData[0].data[0]+storageChartData[0].data[1])}}MB
 				</b>
 			</p>
 		</mat-card-content>

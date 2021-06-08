@@ -79,6 +79,14 @@ export class DashboardComponent implements OnInit {
 		setInterval(() => {
 			this.getMessages();
 		}, 300000);
+		this.service.sendDataToServerApi("getFreeSpace").subscribe(
+			(res: { acces: string, used: number, available: number }) => {
+				this.storageChartData = [{ data: [res.used, (res.available - res.used)] }];
+			},
+			err => {
+				console.error(err);
+			}
+		);
 	}
 
 	getMessages() {

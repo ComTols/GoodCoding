@@ -54,7 +54,11 @@
 	</ng-container>
 
 	<ng-container matColumnDef="action">
-		<th mat-header-cell *matHeaderCellDef></th>
+		<th mat-header-cell *matHeaderCellDef>
+			<button mat-icon-button matTooltip="Neue Datei erstellen" (click)="onClickNewFile()">
+				<mat-icon>add_circle_outline</mat-icon>
+			</button>
+		</th>
 		<td mat-cell *matCellDef="let row">
 			<button mat-button [matMenuTriggerFor]="menu">
 				<mat-icon>more_horiz</mat-icon>
@@ -76,10 +80,10 @@
 						<h3 matLine>Verschieben</h3>
 					</mat-list-item>
 					<mat-divider></mat-divider>
-					<mat-list-item (click)="onClickDetails(row)">
+					<!--<mat-list-item (click)="onClickDetails(row)">
 						<mat-icon matListIcon>info</mat-icon>
 						<h3 matLine>Details</h3>
-					</mat-list-item>
+					</mat-list-item> -->
 				</mat-action-list>
 			</mat-menu>
 		</td>
@@ -89,5 +93,5 @@
 	<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
 <mat-spinner *ngIf="awaitingServerResponse"></mat-spinner>
-<p>{{ergebnisError}}</p>
-<p>{{ergebnisCorrect}}</p>
+<!--<p>{{ergebnisError}}</p>
+<p>{{ergebnisCorrect}}</p> -->
