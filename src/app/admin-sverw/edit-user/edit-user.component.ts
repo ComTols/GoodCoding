@@ -22,7 +22,6 @@ export class EditUserComponent implements OnInit {
 	onClickAddClass() {
 		const dialogRef = this.dialog.open(AddClassDialogComponent);
 		dialogRef.afterClosed().subscribe(result => {
-			console.log(result);
 			if (result != false) {
 				this.coursList.push({
 					class: result,

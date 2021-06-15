@@ -31,7 +31,7 @@ export class FilesComponent implements OnInit {
 	awaitingServerResponse: boolean = true;
 	afuConfig = {
 		multiple: true,
-		formatsAllowed: ".html,.css,.scss,.js,.ts,.php,.txt,.log,.png,.jpg,.jpeg,.gif,.mp4,.mp3",
+		formatsAllowed: ".html,.css,.scss,.js,.ts,.php,.txt,.log,.png,.jpg,.jpeg,.gif,.mp4,.mp3,.jpg,.png,.pdf,.docx,.gif,.html,.php,.py",
 		maxSize: "90",
 		uploadAPI: {
 			url: "https://goodcoding.marianum-fulda.de/api.php",
@@ -72,25 +72,6 @@ export class FilesComponent implements OnInit {
 	) { }
 
 	ngOnInit(): void {
-		this.service.sendDataToServerApi('userLogin').subscribe(
-			res => {
-				if (res["acces"] == "denied") {
-					this.service.openSnackBar("Bitte überprüfen Sie Ihre Eingabe! Die Kombination aus Benutzername und Passwort existiert nicht.", "Okay");
-					this.router.navigate([""]);
-				} else if (res["acces"] == "permitted") {
-					console.log("Zugang gewährt");
-				} else if (res["acces"] == "admin") {
-					console.log("Zugang akzeptiert! Adminrechte zugewiesen.");
-					//TODO: Weiterleitung zu Admin-Bereich
-				}
-			},
-			err => {
-				console.log(err);
-				this.service.openSnackBar("Der Server antwortet nicht. Bitte wenden Sie sich an einen Administrator!", "Okay");
-				this.router.navigate([""]);
-			}
-		);
-
 		//setInterval(() => {
 		this.getDir();
 		//}, 5000);
@@ -110,11 +91,10 @@ export class FilesComponent implements OnInit {
 					pathFrom += this.path[i];
 				}
 				pathFrom += "/" + target.name;
-				console.log("Löschen von " + pathFrom);
 				this.service.sendDataToServerApiWithData("delFileOrDir", pathFrom).subscribe(
 					res => {
 						this.getDir();
-						console.log(res);
+						console.debug(res);
 					},
 					err => {
 						console.error(err);
@@ -135,12 +115,10 @@ export class FilesComponent implements OnInit {
 				}
 				var pathTo: string = pathFrom + "/" + result;
 				pathFrom += "/" + target.name;
-				console.log("Umbenennen von " + pathFrom + " zu " + result);
 				this.service.sendDataToServerApiWithData("moveFile", { from: pathFrom, to: pathTo }).subscribe(
 					res => {
 						this.getDir();
-						console.log(res);
-
+						console.debug(res);
 					},
 					err => {
 						console.error(err);
@@ -173,15 +151,12 @@ export class FilesComponent implements OnInit {
 				pathTo += "/" + target.name;
 
 				if (pathFrom == pathTo) {
-					console.log("Verschiebe nicht");
 					return;
 				}
-				console.log("Verschiebe von " + pathFrom + " nach " + pathTo);
 				this.service.sendDataToServerApiWithData("moveFile", { from: pathFrom, to: pathTo }).subscribe(
 					res => {
 						this.getDir();
-						console.log(res);
-
+						console.debug(res);
 					},
 					err => {
 						console.error(err);
@@ -191,7 +166,6 @@ export class FilesComponent implements OnInit {
 		});
 	}
 	public onClickDetails(target) {
-		console.log(target);
 
 	}
 
@@ -254,7 +228,6 @@ export class FilesComponent implements OnInit {
 	}
 
 	DocUpload(event) {
-		console.log(event);
 		var fails: string = "";
 		event.body.uploadStatus.forEach(e => {
 			if (e.status != "ok") {
@@ -277,11 +250,11 @@ export class FilesComponent implements OnInit {
 
 				this.refreschTable();
 
-				console.log(this.dataSource);
 				this.ergebnisCorrect = JSON.stringify(res);
+				console.debug(res);
 			},
 			err => {
-				console.log(err);
+				console.error(err);
 				this.ergebnisError = err.error.text + " -> FEHLER";
 
 			}
@@ -292,8 +265,6 @@ export class FilesComponent implements OnInit {
 		let dialogRef = this.dialog.open(NewFileComponent);
 		dialogRef.afterClosed().subscribe(result => {
 			if (result != "false") {
-				console.log(result);
-
 				var path: string = "";
 				for (var i: number = 1; i < this.path.length; i++) {
 					path += "/";
@@ -303,6 +274,7 @@ export class FilesComponent implements OnInit {
 				this.service.sendDataToServerApiWithData("newFile", path).subscribe(
 					res => {
 						this.getDir();
+						console.debug(res);
 					},
 					err => {
 						console.error(err);

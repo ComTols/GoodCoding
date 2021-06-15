@@ -18,7 +18,6 @@ export class FiletreeComponent implements OnInit {
 	}
 
 	onClickFile(path: string, name: string) {
-		console.log(path + "/" + name);
 		this.cklickFile.emit(path + "/" + name);
 	}
 

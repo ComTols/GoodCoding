@@ -68,8 +68,18 @@ const routes: Routes = [{
 	path: 'logout',
 	component: LogoutComponent
 }, {
+	path: '~',
+	pathMatch: 'prefix',
+	component: NotFoundComponent,
+	children: [
+		{
+			path: '**',
+			component: NotFoundComponent
+		}
+	]
+}, {
 	path: '**',
-	redirectTo: '404',
+	component: NotFoundComponent,
 	pathMatch: 'full'
 }
 ];

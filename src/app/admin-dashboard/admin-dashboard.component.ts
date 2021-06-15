@@ -93,7 +93,7 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 
 		this.service.sendDataToServerApi("getFreeSpace").subscribe(
 			(res: { acces: string, available: number, used: number }) => {
-				console.log(res);
+				console.debug(res);
 				this.storageChartData = [{ data: [res.used, (res.available - res.used)] }];
 			},
 			err => {
@@ -102,8 +102,6 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 		);
 	}
 	ngAfterViewInit(): void {
-		console.log(this.charts);
-
 		setInterval(() => {
 			this.service.sendDataToServerApi("memory").subscribe(
 				(res: { acces: string, total: number, used: number, free: number, shared: number, buffChache: number, available: number }) => {
@@ -113,9 +111,11 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 					this.totalMemory = res.total;
 					this.memoryProgress = res.used / res.total * 100;
 					this.memoryBuffer = 100 - ((res.available - res.free) / res.total * 100);
+					console.debug(res);
+
 				},
 				err => {
-					console.log(err);
+					console.error(err);
 				}
 			);
 			this.service.sendDataToServerApi("cpu").subscribe(
@@ -124,20 +124,21 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 					this.cpuChartData[0].data.push(res.workload1min);
 					this.charts.toArray()[2].chart.update();
 					this.cpu = res.workload1min;
+					console.debug(res);
 				},
 				err => {
-					console.log(err);
+					console.error(err);
 				}
 			);
 		}, 1000);
 
 		this.service.sendDataToServerApi("needName").subscribe((res: { acces: string, needName: boolean }) => {
-			console.log(res);
+			console.debug(res);
 			if (res.needName) {
 				this.openNewNameDialog();
 			}
 		}, err => {
-			console.log(err);
+			console.error(err);
 
 		});
 	}
@@ -145,7 +146,7 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 	openNewNameDialog() {
 		let dialogRef = this.dialog.open(NeedNameDialog);
 		dialogRef.afterClosed().subscribe((result: { forename: string, lastname: string }) => {
-			console.log(result);
+			console.debug(result);
 
 			if (result == undefined) {
 				this.openNewNameDialog();
@@ -156,34 +157,15 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 				forename: result.forename,
 				lastname: result.lastname
 			}).subscribe((res) => {
-				console.log(res);
+				console.debug(res);
 			}, err => {
-				console.log(err);
+				console.error(err);
 			});
 
 		});
 	}
 
 	ngOnInit(): void {
-		this.service.sendDataToServerApi('userLogin').subscribe(
-			res => {
-				if (res["acces"] == "denied") {
-					this.service.openSnackBar("Bitte überprüfen Sie Ihre Eingabe! Die Kombination aus Benutzername und Passwort existiert nicht.", "Okay");
-					this.router.navigate([""]);
-				} else if (res["acces"] == "permitted") {
-					console.log("Zugang verweigert! Keine Admin-Rechte!");
-					this.service.openSnackBar("Sie haben keine Administrator-Rechte! Daher wurden Sie auf die Schülerseite weitergeleitet. Bitte wenden Sie sich an einen Administrator, um Rechte zu erhalten.", "Okay");
-					this.router.navigate(["dashboard"]);
-				} else if (res["acces"] == "admin") {
-					console.log("Zugang akzeptiert! Adminrechte zugewiesen.");
-				}
-			},
-			err => {
-				console.log("Fehler gemeldet");
-				this.service.openSnackBar("Der Server antwortet nicht. Bitte wenden Sie sich an einen Administrator!", "Okay");
-				this.router.navigate([""]);
-			}
-		);
 		this.getMessages();
 		setInterval(() => {
 			this.getMessages();
@@ -199,19 +181,12 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 	getMessages() {
 		this.service.sendDataToServerApi("getMessages").subscribe(
 			(res: { acces: string, allMessages: message[], allClasses: string[] }) => {
-				console.log(res);
+				console.debug(res);
 				if (res.allMessages.length != 0) {
 					this.messages = res.allMessages;
 
 					this.messages.forEach(e => {
-						console.log(e.send);
-						console.log(e.liveTime);
-
 						e.send = new Date(e.send);
-
-						console.log((e.send.getTime() + e.liveTime * 1000) + " > " + new Date().getTime());
-
-
 						if ((e.send.getTime() + e.liveTime) > new Date().getTime()) {
 							e.isNew = true;
 						} else {
@@ -222,13 +197,12 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 				this.classes = res.allClasses;
 			},
 			err => {
-				console.log(err);
+				console.error(err);
 			}
 		);
 	}
 
 	openBottomSheet(m: message) {
-		console.log(m);
 		this._bottomSheet.open(BottomSheetMessage, {
 			data: {
 				message: m,
@@ -238,8 +212,6 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 	}
 
 	newMessage() {
-		console.log(this.classes);
-
 		let dialogRef = this.dialog.open(NewMessageDialog, {
 			width: '50%',
 			data: {
@@ -254,9 +226,9 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 				message: result.message,
 				receiver: result.receiver
 			}).subscribe((res) => {
-				console.log(res);
+				console.debug(res);
 			}, err => {
-				console.log(err);
+				console.error(err);
 			});
 
 		});
@@ -269,7 +241,7 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 	templateUrl: 'new-message-dialog.html',
 	styleUrls: []
 })
-export class NewMessageDialog implements OnInit {
+export class NewMessageDialog {
 
 
 	newMessage: FormGroup = new FormGroup({
@@ -283,10 +255,6 @@ export class NewMessageDialog implements OnInit {
 		@Inject(MAT_DIALOG_DATA) public data: { classes: string[] }
 	) { }
 
-	ngOnInit(): void {
-		console.log(this.data.classes);
-
-	}
 
 	onClickSend() {
 		if (!this.newMessage.valid) return;

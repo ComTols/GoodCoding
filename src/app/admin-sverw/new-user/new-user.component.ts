@@ -32,13 +32,11 @@ export class NewUserComponent implements OnInit {
 	onClickSave() {
 		var valid: boolean = true;
 		for (var i: number = 0; i < this.newUsers.length; i++) {
-			//console.log("Prüfe " + i + " von " + (this.newUsers.length - 1));
 			if (this.newUsers[i].username == "") {
-				console.log("Lösche: " + i);
 				this.newUsers.splice(i, 1);
 				i--;
 			} else if (this.newUsers[i].course == "") {
-				console.log("Nicht valide! Klasse nicht gesetzt!");
+				console.error("Nicht valide! Klasse nicht gesetzt!");
 				valid = false;
 			}
 		}
@@ -53,7 +51,6 @@ export class NewUserComponent implements OnInit {
 	onClickAddClass() {
 		const dialogRef = this.dialog.open(AddClassDialogComponent);
 		dialogRef.afterClosed().subscribe(result => {
-			console.log(result);
 			if (result != false) {
 				this.courses.push({
 					class: result,
@@ -86,8 +83,6 @@ export class NewUserComponent implements OnInit {
 			});
 		}
 		this.newUsers[num - 1].username = event.target.value;
-		console.log(this.newUsers);
-
 	}
 	forename(num: number, event) {
 		while (this.newUsers.length <= num) {

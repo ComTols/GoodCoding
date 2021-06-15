@@ -81,6 +81,7 @@ export class EditorComponent implements OnInit {
 	ngOnInit(): void {
 		this.service.sendDataToServerApiWithData('getDir', { path: '/home/' + localStorage.getItem("username") + '/public_html' }).subscribe(
 			(res: { acces: string, dirTree: dirStructur[] }) => {
+				console.debug(res);
 				this.awaitingServerResponse = false;
 				res.dirTree.forEach(e => {
 					this.source.push(this.changeDirStructureToFileNode(e, "root"));
@@ -119,11 +120,10 @@ export class EditorComponent implements OnInit {
 
 				});
 
-				console.log(this.source);
 				this.ergebnisCorrect = JSON.stringify(res);
 			},
 			err => {
-				console.log(err);
+				console.error(err);
 				this.ergebnisError = err.error.text + " -> FEHLER";
 
 			}
@@ -211,7 +211,6 @@ export class EditorComponent implements OnInit {
 	}
 
 	onClickClose() {
-		console.log("Close");
 		this.router.navigate(["/files"]);
 	}
 
@@ -220,6 +219,7 @@ export class EditorComponent implements OnInit {
 			(res: { acces: string, saveFileError: boolean }) => {
 				if (!res.saveFileError) {
 					this.service.openSnackBar("Die Datei konnte nicht gespeichert werden!", "OK");
+					console.debug(res);
 				}
 
 			},
@@ -234,7 +234,7 @@ export class EditorComponent implements OnInit {
 		if (this.aktPath != path) {
 			this.service.sendDataToServerApiWithData("getFile", { path: "/home/" + localStorage.getItem("username") + "/public_html/" + path }).subscribe(
 				(res: { acces: string, fileContent: string }) => {
-					console.log(res);
+					console.debug(res);
 					this.value = res.fileContent;
 					this.aktPath = path;
 					var pathParts = path.split(".");

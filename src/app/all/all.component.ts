@@ -18,29 +18,9 @@ export class AllComponent implements OnInit {
 	constructor(
 		private router: Router,
 		private service: ClientService
-	) {
-		//TODO: Hole alle User vom Server
-	}
+	) { }
 
 	ngOnInit(): void {
-		this.service.sendDataToServerApi('userLogin').subscribe(
-			res => {
-				if (res["acces"] == "denied") {
-					this.service.openSnackBar("Bitte überprüfen Sie Ihre Eingabe! Die Kombination aus Benutzername und Passwort existiert nicht.", "Okay");
-					this.router.navigate([""]);
-				} else if (res["acces"] == "permitted") {
-					console.log("Zugang gewährt");
-				} else if (res["acces"] == "admin") {
-					console.log("Zugang akzeptiert! Adminrechte zugewiesen.");
-					//TODO: Weiterleitung zu Admin-Bereich
-				}
-			},
-			err => {
-				console.log(err);
-				this.service.openSnackBar("Der Server antwortet nicht. Bitte wenden Sie sich an einen Administrator!", "Okay");
-				this.router.navigate([""]);
-			}
-		);
 		this.waitForServer = true;
 		this.getAllSites();
 		setInterval(() => {
@@ -52,7 +32,7 @@ export class AllComponent implements OnInit {
 		this.service.sendDataToServerApi('getAllSites').subscribe(
 			(res: { acces: string, sitesAvailable: { domain: string, cours: string, name: string, forename: string }[] }) => {
 				this.waitForServer = false;
-				console.log(res);
+				console.debug(res);
 				this.ergebnisCorrect = JSON.stringify(res);
 				res.sitesAvailable.forEach(element => {
 					var classFound: boolean = false;
@@ -89,7 +69,7 @@ export class AllComponent implements OnInit {
 				});
 			},
 			err => {
-				console.log(err);
+				console.error(err);
 				this.ergebnisError = err.error.text + " -> FEHLER";
 
 			}

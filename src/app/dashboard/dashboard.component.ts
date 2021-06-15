@@ -47,34 +47,6 @@ export class DashboardComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
-		this.service.sendDataToServerApi('userLogin').subscribe(
-			res => {
-				if (res["acces"] == "denied") {
-					this.service.openSnackBar("Bitte überprüfen Sie Ihre Eingabe! Die Kombination aus Benutzername und Passwort existiert nicht.", "Okay");
-					this.router.navigate([""]);
-				} else if (res["acces"] == "permitted") {
-					console.log("Zugang gewährt");
-				} else if (res["acces"] == "admin") {
-					console.log("Zugang akzeptiert! Adminrechte zugewiesen.");
-					//TODO: Weiterleitung zu Admin-Bereich
-				}
-			},
-			err => {
-				console.log("Fehler gemeldet");
-
-				//console.log(err);
-				console.log("Es ist ein Fehler aufgetreten.");
-
-				var message: string = err.error.text;
-				message.replace("\\", '');
-				console.log(message);
-				console.log("Gut");
-
-				console.log(err);
-				this.service.openSnackBar("Der Server antwortet nicht. Bitte wenden Sie sich an einen Administrator!", "Okay");
-				this.router.navigate([""]);
-			}
-		);
 		this.getMessages();
 		setInterval(() => {
 			this.getMessages();
@@ -82,6 +54,7 @@ export class DashboardComponent implements OnInit {
 		this.service.sendDataToServerApi("getFreeSpace").subscribe(
 			(res: { acces: string, used: number, available: number }) => {
 				this.storageChartData = [{ data: [res.used, (res.available - res.used)] }];
+				console.debug(res);
 			},
 			err => {
 				console.error(err);
@@ -92,19 +65,12 @@ export class DashboardComponent implements OnInit {
 	getMessages() {
 		this.service.sendDataToServerApi("getMessages").subscribe(
 			(res: { acces: string, messagesToMe: message[] }) => {
-				console.log(res);
+				console.debug(res);
 				if (res.messagesToMe.length != 0) {
 					this.messages = res.messagesToMe;
 
 					this.messages.forEach(e => {
-						console.log(e.send);
-						console.log(e.liveTime);
-
 						e.send = new Date(e.send);
-
-						console.log((e.send.getTime() + e.liveTime * 1000) + " > " + new Date().getTime() + " --- " + ((e.send.getTime() + e.liveTime) > new Date().getTime()));
-
-
 						if ((e.send.getTime() + e.liveTime) > new Date().getTime()) {
 							e.isNew = true;
 							this.newMessagesNum++;
@@ -115,13 +81,12 @@ export class DashboardComponent implements OnInit {
 				}
 			},
 			err => {
-				console.log(err);
+				console.error(err);
 			}
 		);
 	}
 
 	openBottomSheet(m: message) {
-		console.log(m);
 		this._bottomSheet.open(BottomSheetMessage, {
 			data: {
 				message: m,

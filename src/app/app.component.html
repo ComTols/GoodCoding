@@ -1,4 +1,4 @@
-<particles [params]="myParams" [style]="myStyle" [width]="width" [height]="height" *ngIf="!isEditor"></particles>
+<!--<particles [params]="myParams" [style]="myStyle" [width]="width" [height]="height" *ngIf="!isEditor"></particles> -->
 <mat-sidenav-container id="particles-js" *ngIf="!isLogin && !isEditor">
 	<mat-sidenav #drawer class='fix-nav'>
 		<mat-nav-list>
@@ -7,7 +7,7 @@
 			</a>
 			<div *ngFor="let item of navItems">
 				<a mat-list-item href="{{item.url}}"
-					*ngIf="site.name!=item.name && item.admin==site.admin && item.showInNavBar">{{item.name}}</a>
+					*ngIf="site?.name!=item.name && item.admin==site?.admin && item.showInNavBar">{{item.name}}</a>
 			</div>
 
 		</mat-nav-list>
@@ -15,7 +15,7 @@
 	<mat-sidenav-content>
 		<div class="headline">
 			<h1>Good Coding</h1>
-			<h2><span *ngIf="site.admin">Administrator:</span>{{site.name}}</h2>
+			<h2><span *ngIf="site?.admin">Administrator:</span>{{site?.name}}</h2>
 		</div>
 		<div class="wrapper">
 			<router-outlet></router-outlet>

@@ -73,15 +73,13 @@ export class LoginComponent implements OnInit {
 			return;
 		}
 
-		//this.service.setLoginData(this.loginForm.value['username'], this.loginForm.value['password']);
 		localStorage.setItem("username", this.loginForm.value['username']);
 		localStorage.setItem("password", this.loginForm.value['password']);
 		localStorage.setItem("cours", this.loginForm.value['cours']);
 		this.awaitingServerResponse = true;
-		//this.service.validLoginData(this);
 		this.service.sendDataToServerApi('userLogin').subscribe(
 			(res: { acces: string }) => {
-				console.log(res);
+				console.debug(res);
 
 				this.awaitingServerResponse = false;
 				if (res["acces"] == "denied") {
@@ -91,22 +89,22 @@ export class LoginComponent implements OnInit {
 					this.isUsernameValid = true;
 					this.loginFaild = true;
 				} else if (res["acces"] == "permitted") {
-					console.log("Zugang gewährt");
+					console.debug("Zugang gewährt");
 					this.loginFaild = false;
 					this.router.navigate(["/dashboard"]);
 				} else if (res["acces"] == "admin") {
-					console.log("Zugang akzeptiert! Adminrechte zugewiesen.");
+					console.debug("Zugang akzeptiert! Adminrechte zugewiesen.");
 					this.loginFaild = false;
 					this.router.navigate(["/admin/dashboard"]);
 				} else if (res["acces"] == "wait") {
-					console.log("Freischaltung erforderlich!");
+					console.debug("Freischaltung erforderlich!");
 					this.loginFaild = false;
 					this.router.navigate(["/wait"]);
 				}
 			},
 			err => {
 				this.awaitingServerResponse = true;
-				console.log(err);
+				console.error(err);
 				this.service.openSnackBar("Der Server antwortet nicht. Bitte wenden Sie sich an einen Administrator!", "Okay");
 			}
 		);

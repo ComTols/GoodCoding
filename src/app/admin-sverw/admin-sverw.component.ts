@@ -35,25 +35,6 @@ export class AdminSverwComponent implements OnInit {
 	) { }
 
 	ngOnInit(): void {
-		this.service.sendDataToServerApi('userLogin').subscribe(
-			res => {
-				if (res["acces"] == "denied") {
-					this.service.openSnackBar("Bitte überprüfen Sie Ihre Eingabe! Die Kombination aus Benutzername und Passwort existiert nicht.", "Okay");
-					this.router.navigate([""]);
-				} else if (res["acces"] == "permitted") {
-					console.log("Zugang verweigert! Keine Admin-Rechte!");
-					this.service.openSnackBar("Sie haben keine Administrator-Rechte! Daher wurden Sie auf die Schülerseite weitergeleitet. Bitte wenden Sie sich an einen Administrator, um Rechte zu erhalten.", "Okay");
-					this.router.navigate(["dashboard"]);
-				} else if (res["acces"] == "admin") {
-					console.log("Zugang akzeptiert! Adminrechte zugewiesen.");
-				}
-			},
-			err => {
-				console.log(err);
-				this.service.openSnackBar("Der Server antwortet nicht. Bitte wenden Sie sich an einen Administrator!", "Okay");
-				this.router.navigate([""]);
-			}
-		);
 		this.awaitServerResponse = true;
 		this.refreshList();
 		setInterval(() => {
@@ -65,22 +46,18 @@ export class AdminSverwComponent implements OnInit {
 		this.isNewUser = true;
 	}
 	onClickCheckbox(username: String) {
-		console.log(username);
 		this.data.forEach(element => {
 			element.member.forEach(e => {
 				if (e.username == username) {
 					e.selected = !e.selected;
-					console.log(e.selected);
 				}
 			});
 		});
 	}
 	onClickCheckboxWaitingUser(username: String) {
-		console.log(username);
 		this.dataWaiting.forEach(element => {
 			if (element.username == username) {
 				element.selected = !element.selected;
-				console.log(element.selected);
 			}
 		});
 	}
@@ -126,29 +103,24 @@ export class AdminSverwComponent implements OnInit {
 		});
 	}
 	onClickEdit(username: String) {
-		console.log(username);
 		this.isEdit = true;
 		this.data.forEach(element => {
 			element.member.forEach(e => {
 				if (e.username == username) {
 					this.onClickCheckbox(username); //Checkbox uncheck
-					console.log("unchecked!");
 					this.editUsers = [e];
 				}
 			});
 		});
 	}
 	onClickEditAll(cours: String) {
-		console.log(cours);
 		this.editUsers = [];
 		this.data.forEach(element => {
 			if (element.class == cours) {
 				element.member.forEach(e => {
 					if (e.selected == true) {
 						this.onClickCheckbox(e.username); //Checkbox uncheck
-						console.log("unchecked!");
 						this.editUsers.push(e);
-						console.log(this.editUsers);
 					}
 				});
 			}
@@ -160,16 +132,30 @@ export class AdminSverwComponent implements OnInit {
 	onClickLock(username: string) {
 		const dialogRef = this.dialog.open(LockDialogComponent, { data: { mode: "singly", user: username } });
 		dialogRef.afterClosed().subscribe(res => {
-			if (res) {
-				//TODO: Benutzer sperren
+			if (res != "false" && res != undefined) {
+				this.service.sendDataToServerApiWithData("lockUser", username).subscribe(
+					res => {
+						console.debug(res);
+					},
+					err => {
+						console.error(err);
+					}
+				)
 			}
 		});
 	}
 	onClickDelete(username: string) {
 		const dialogRef = this.dialog.open(DeleteDialogComponent, { data: { mode: "singly", user: username } });
 		dialogRef.afterClosed().subscribe(res => {
-			if (res) {
-				//TODO: Benutzer löschen
+			if (res != "false" && res != undefined) {
+				this.service.sendDataToServerApiWithData("delUser", username).subscribe(
+					res => {
+						console.debug(res);
+					},
+					err => {
+						console.error(err);
+					}
+				)
 			}
 		});
 	}
@@ -184,17 +170,17 @@ export class AdminSverwComponent implements OnInit {
 	finishEdit(event: { username: string, forename: string, lastname: string }[]) {
 		this.isEdit = false;
 		if (event == undefined) {
-			console.log("Bearbeiten abgebrochen!");
 			return;
 		}
-		console.log("Sende event zum Server:");
-		console.log(event);
+		console.debug(event);
 		this.awaitServerResponse = true;
 		this.service.sendDataToServerApiWithData("editUser", { editUsers: event }).subscribe(
 			res => {
 				this.awaitServerResponse = false;
+				console.debug(res);
 			},
 			err => {
+				console.error(err);
 				this.awaitServerResponse = false;
 				this.service.openSnackBar("Der Benutzer konnte nicht bearbeitet werden. Bitte wenden Sie sich an einen Administartor!", "OK");
 			}
@@ -204,16 +190,16 @@ export class AdminSverwComponent implements OnInit {
 	finishAdding(event) {
 		this.isNewUser = false;
 		if (event == undefined) {
-			console.log("Hinzufügen abgebrochen!");
 			return;
 		}
-		console.log("Sende event zum Server:");
-		console.log(event);
+		console.debug(event);
 		this.service.sendDataToServerApiWithData("addUser", { addedUsers: event }).subscribe(
 			res => {
 				this.awaitServerResponse = false;
+				console.debug(res);
 			},
 			err => {
+				console.error(err);
 				this.awaitServerResponse = false;
 				this.service.openSnackBar("Der Benutzer konnte nicht hinzugefügt werden. Bitte wenden Sie sich an einen Administartor!", "OK");
 			}
@@ -223,17 +209,16 @@ export class AdminSverwComponent implements OnInit {
 	finishAllowing(event) {
 		this.isAllowAccess = false;
 		if (event == undefined) {
-			console.log("Erlauben abgebrochen");
 			return;
 		}
-		console.log("Sende event zum Server:");
-		console.log(event);
+		console.debug(event);
 		this.service.sendDataToServerApiWithData("allowUsers", { allowedUsers: event }).subscribe(
 			res => {
-				console.log(res);
+				console.debug(res);
 				this.awaitServerResponse = false;
 			},
 			err => {
+				console.error(err);
 				this.awaitServerResponse = false;
 				this.service.openSnackBar("Der Zugang konnte dem Nutzer nicht erlaubt werden. Bitte wenden Sie sich an einen Administartor!", "OK");
 			}
@@ -245,6 +230,9 @@ export class AdminSverwComponent implements OnInit {
 			(res: { acces: string, waitingUsers: [{ username: string, lastLogin: string }], activeUsers: [{ username: string, cours: string, databases: number, lastLogin: string, access: string, name: string, forename: string, block: string }] }) => {
 				this.awaitServerResponse = false;
 				this.ergebnisCorrect = JSON.stringify(res);
+
+				console.debug(res);
+
 
 				//Für wartende Nutzer:
 				res.waitingUsers.forEach(waitingUser => {
@@ -366,18 +354,11 @@ export class AdminSverwComponent implements OnInit {
 						}
 					}
 				}
-
 				//Refresh:
 				this.refresh = [Math.random().toString()]
-
-				//LOG:
-				console.log(this.dataWaiting);
-				console.log(this.data);
-
-
 			},
 			err => {
-				console.log(err);
+				console.error(err);
 				this.ergebnisError = err.error.text + " -> FEHLER";
 
 			}

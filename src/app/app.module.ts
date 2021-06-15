@@ -16,7 +16,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { FooterBarComponent } from './footer-bar/footer-bar.component';
 import { StorageChartComponent } from './dashboard/storage-chart/storage-chart.component';
 import { DatabaseChartComponent } from './dashboard/database-chart/database-chart.component';
-import { ParticlesModule } from 'angular-particle';
+//import { ParticlesModule } from 'angular-particle';
 import { RenameDialogComponent } from './files/rename-dialog/rename-dialog.component';
 import { DelDialogComponent } from './files/del-dialog/del-dialog.component';
 import { MoveDialogComponent } from './files/move-dialog/move-dialog.component';
@@ -90,7 +90,7 @@ const DEFAULT_ACE_CONFIG: AceConfigInterface = {
 		MaterialModule,
 		ReactiveFormsModule,
 		ChartsModule,
-		ParticlesModule,
+		//ParticlesModule,
 		AceModule,
 		AngularFileUploaderModule
 	],

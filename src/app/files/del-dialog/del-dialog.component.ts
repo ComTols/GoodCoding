@@ -22,12 +22,8 @@ export class DelDialogComponent implements OnInit {
 			if (this.data.target.content != null) {
 
 				this.data.target.content.forEach(e => {
-					console.log(e.type);
-
 					if (e.type != "arrow_back") {
 						this.isNotEmptyDir = true;
-						console.log("Nicht leer");
-
 					}
 				});
 			}

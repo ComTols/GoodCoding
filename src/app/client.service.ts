@@ -10,8 +10,8 @@ import { retry } from 'rxjs/operators';
 })
 export class ClientService {
 
-	private url: string = "https://goodcoding.marianum-fulda.de/api.php";
-	//private url: string = "http://localhost/test.php";
+	private url: string = "https://goodcoding.marianum-fulda.de/testapi.php";
+	//private url: string = "http://localhost/index.php";
 
 	private connectionRetry: number = 5;
 

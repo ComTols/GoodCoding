@@ -23,7 +23,7 @@ export class WaitComponent implements OnInit {
 		this.interval = setInterval(() => {
 			this.service.sendDataToServerApi('userLogin').subscribe(
 				res => {
-					console.log(res);
+					console.debug(res);
 					if (res["acces"] == "permitted") {
 						this.onWaitingForAccess = false;
 						this.message = "Dir wurde der Zugang gewährt. Bitte melde dich erneut an!";
@@ -41,7 +41,7 @@ export class WaitComponent implements OnInit {
 					}
 				},
 				err => {
-					console.log(err);
+					console.error(err);
 					this.onWaitingForAccess = false;
 					this.message = "Ein Fehler ist aufgetreten!";
 					this.isError = true;

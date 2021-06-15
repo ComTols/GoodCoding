@@ -50,9 +50,7 @@ export class MoveDialogComponent implements OnInit {
 	constructor(
 		@Inject(MAT_DIALOG_DATA) public data: { tree: dirStructur[] }
 	) {
-		console.log(data.tree);
 		this.dataSource = this.recFillInDirTree(data.tree, ["root"]);
-		console.log(this.dataSource);
 		this.aktDir = this.dataSource;
 	}
 
@@ -81,12 +79,8 @@ export class MoveDialogComponent implements OnInit {
 	}
 
 	onClickFolder(name: string) {
-		console.log(name);
-
 		var tempDir: dirTree[];
 		this.path.push(name);
-		console.log(this.path);
-
 		this.path.forEach(e => {
 			if (e == "root") {
 				tempDir = this.dataSource;
@@ -115,8 +109,6 @@ export class MoveDialogComponent implements OnInit {
 		if (this.path.length <= 1) return;
 		var tempDir: dirTree[];
 		this.path.pop();
-		console.log(this.path);
-
 		this.path.forEach(e => {
 			if (e == "root") {
 				tempDir = this.dataSource;
